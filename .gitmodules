@@ -1,0 +1,3 @@
+[submodule "arduinoLibrary"]
+	path = arduinoLibrary
+	url = git@github.com:cattanimarco/Grafici-GFX.git
