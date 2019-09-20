@@ -5,7 +5,7 @@ CCSRC = $(wildcard *.cpp) \
 OBJ = $(CCSRC:.cpp=.o)
 
 CFLAGS=-I.
-CXXFLAGS=-g -std=c++11 -Wall -I.#-pedantic
+CXXFLAGS=-g -std=c++11 -Wall -Wextra -Wpedantic -Wunused -I.
 
 ifdef OS
 	RM = del /Q
