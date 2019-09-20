@@ -67,7 +67,7 @@ class Adafruit_GFX  {
 
   uint8_t getRotation(void) const;
 
-;
+
 
  protected:
 

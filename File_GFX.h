@@ -8,13 +8,13 @@
 class File_GFX : public Adafruit_GFX
 {
 public:
-	File_GFX(int width, int height, char *filename);
+	File_GFX(int width, int height, std::string filename);
 	void drawPixel(int16_t x, int16_t y, uint16_t color);
 	void flush(void);
 
 private:
 	HEZDIMAGE hDib;
-	char *filename;
+	std::string filename;
 };
 
 #endif //GRAFICI_GFX_DRIVER_FILE_H
