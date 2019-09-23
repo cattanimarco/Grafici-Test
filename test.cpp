@@ -12,27 +12,23 @@
 #include "Grafici-GFX/decorators/DataSetSpline.h"
 #include "Grafici-GFX/decorators/DataSetHistogram.h"
 
+#include "Grafici-GFX/colorSchemes/bw.h"
 #include "Grafici-GFX/colorSchemes/rainbow.h"
 #include "Grafici-GFX/colorSchemes/heat.h"
 #include "Grafici-GFX/colorSchemes/neon.h"
 #include "Grafici-GFX/colorSchemes/france.h"
 #include "Grafici-GFX/colorSchemes/cmyk.h"
 #include "Grafici-GFX/colorSchemes/bright.h"
-#include "Grafici-GFX/colorSchemes/bw.h"
 
 //todo make an h file to include all basic essentials
 //#include <iostream>
 
 int main()
 {
-	Grafici grafici;
-
 	DataSetFloat dataset;
 	DataSetInterpolator dataInterpolator;
 	DataSetSpline dataSpline;
 	DataSetHistogram dataHist;
-
-	ColorTheme myTheme(csBright, ColorSource::computeFromX);
 
 	{
 		/* == INTERPOLATION == */
@@ -41,7 +37,10 @@ int main()
 
 		Adafruit_GFX *gfx = new File_GFX(1024, 768, "interpolation.bmp");
 
-		grafici.begin(*gfx, myTheme);
+		grafici.begin(*gfx);
+
+		grafici.setColorPalette(csBright);
+		grafici.setColorSource(ColorSource::computeFromX);
 
 		DisplayBoundaries left;
 		DisplayBoundaries mid;
@@ -86,7 +85,8 @@ int main()
 
 		Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
 
-		grafici.begin(*gfx, myTheme);
+		grafici.begin(*gfx);
+		grafici.setColorSource(ColorSource::computeFromX);
 
 		// dataset - we provide the same array for Y and values so that the color encodes the bar height
 		dataset.begin(dataArrayY, dataArrayY, 11);
@@ -95,16 +95,17 @@ int main()
 		ColorPalette colorPalettes[6] = {csRainbow, csBright, csFrance, csCmyk, csHeat, csBw};
 
 		barPlot.thickness = 0.9;
-		
+
 		for (int i = 0; i < 6; i++)
 		{
 			DisplayBoundaries boundaries;
-			ColorTheme theme(colorPalettes[i], ColorSource::computeFromX);
-			//boundaries.begin();
+			grafici.setColorPalette(colorPalettes[i]);
+			
 			boundaries.subBoundaries(2, 3, i);
-			grafici.clear(boundaries, theme);
+			grafici.clear(boundaries);
+			
 			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
-			grafici.plot(barPlot, dataSpline, boundaries, theme);
+			grafici.plot(barPlot, dataSpline, boundaries);
 		}
 
 		//flush to file
