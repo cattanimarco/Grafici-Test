@@ -72,7 +72,7 @@ int main()
 		grafici.plot(scatterPlot, dataInterpolator, mid);
 		grafici.plot(scatterPlot, dataSpline, right);
 
-		((BarPlot*)barPlot)->thickness = 0.0;
+		barPlot.thickness = 0.0;
 		grafici.plot(barPlot, dataset, left);
 		grafici.plot(barPlot, dataInterpolator, mid);
 		grafici.plot(barPlot, dataSpline, right);
@@ -94,8 +94,8 @@ int main()
 
 		ColorPalette colorPalettes[6] = {csRainbow, csBright, csFrance, csCmyk, csHeat, csBw};
 
-		((BarPlot*)barPlot)->thickness = 0.9;
-
+		barPlot.thickness = 0.9;
+		
 		for (int i = 0; i < 6; i++)
 		{
 			DisplayBoundaries boundaries;
