@@ -2,26 +2,24 @@
 
 #include "Grafici-GFX/Grafici.h"
 
-#include "Grafici-GFX/plotObjects/barPlot.h"
-#include "Grafici-GFX/plotObjects/linePlot.h"
 #include "Grafici-GFX/plotObjects/axisPlot.h"
+#include "Grafici-GFX/plotObjects/barPlot.h"
+#include "Grafici-GFX/plotObjects/barcodePlot.h"
+#include "Grafici-GFX/plotObjects/linePlot.h"
 #include "Grafici-GFX/plotObjects/scatterPlot.h"
 
 #include "Grafici-GFX/datasets/DataSetFloat.h"
+#include "Grafici-GFX/decorators/DataSetHistogram.h"
 #include "Grafici-GFX/decorators/DataSetInterpolator.h"
 #include "Grafici-GFX/decorators/DataSetSpline.h"
-#include "Grafici-GFX/decorators/DataSetHistogram.h"
 
+#include "Grafici-GFX/colorSchemes/bright.h"
 #include "Grafici-GFX/colorSchemes/bw.h"
-#include "Grafici-GFX/colorSchemes/rainbow.h"
+#include "Grafici-GFX/colorSchemes/cmyk.h"
+#include "Grafici-GFX/colorSchemes/france.h"
 #include "Grafici-GFX/colorSchemes/heat.h"
 #include "Grafici-GFX/colorSchemes/neon.h"
-#include "Grafici-GFX/colorSchemes/france.h"
-#include "Grafici-GFX/colorSchemes/cmyk.h"
-#include "Grafici-GFX/colorSchemes/bright.h"
-
-//todo make an h file to include all basic essentials
-//#include <iostream>
+#include "Grafici-GFX/colorSchemes/rainbow.h"
 
 int main()
 {
@@ -31,9 +29,9 @@ int main()
 	DataSetHistogram dataHist;
 
 	{
-		/* == INTERPOLATION == */
+		/* == INTERPOLATION + MULTIPLOT == */
 		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
-		float dataArrayY[13] = {0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0};
+		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
 
 		Adafruit_GFX *gfx = new File_GFX(1024, 768, "interpolation.bmp");
 
@@ -81,7 +79,7 @@ int main()
 
 	{
 		/* == COLOR SCHEMES == */
-		float dataArrayY[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
 		Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
 
@@ -92,7 +90,7 @@ int main()
 		dataset.begin(dataArrayY, dataArrayY, 11);
 		dataSpline.begin(&dataset, 20);
 
-		ColorPalette colorPalettes[6] = {csRainbow, csBright, csFrance, csCmyk, csHeat, csBw};
+		ColorPalette colorPalettes[6] = { csRainbow, csBright, csFrance, csCmyk, csHeat, csBw };
 
 		barPlot.thickness = 0.9;
 
@@ -100,12 +98,44 @@ int main()
 		{
 			DisplayBoundaries boundaries;
 			grafici.setColorPalette(colorPalettes[i]);
-			
+
 			boundaries.subBoundaries(2, 3, i);
 			grafici.clear(boundaries);
-			
+
 			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
 			grafici.plot(barPlot, dataSpline, boundaries);
+		}
+
+		//flush to file
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* == PLOT STYLES == */
+		float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
+
+		Adafruit_GFX *gfx = new File_GFX(1024, 768, "plot_types.bmp");
+
+		grafici.begin(*gfx);
+		grafici.setColorSource(ColorSource::computeFromY);
+		grafici.setColorPalette(csCmyk);
+		grafici.clear();
+
+		// dataset - we provide the same array for Y and values so that the color encodes the bar height
+		dataset.begin(dataArrayY, 1.0, 11);
+		dataSpline.begin(&dataset, 20);
+
+		PlotObj *plots[6] = { &barcodePlot, &barPlot, &linePlot, &scatterPlot, &linePlot, &linePlot };
+
+		barPlot.thickness = 0.9;
+
+		for (int i = 0; i < 6; i++)
+		{
+			DisplayBoundaries boundaries;
+			boundaries.subBoundaries(2, 3, i);
+			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
+
+			grafici.plot(*plots[i], dataSpline, boundaries);
 		}
 
 		//flush to file
