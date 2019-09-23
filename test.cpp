@@ -29,7 +29,7 @@ int main()
 	DataSetHistogram dataHist;
 
 	{
-		/* == INTERPOLATION + MULTIPLOT == */
+		/* == INTERPOLATION == */
 		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
 		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
 
@@ -45,8 +45,8 @@ int main()
 		DisplayBoundaries right;
 
 		dataset.begin(dataArrayY, dataArrayY, 13);
-		dataInterpolator.begin(&dataset, 40);
-		dataSpline.begin(&dataset, 40);
+		dataInterpolator.begin(&dataset, 100);
+		dataSpline.begin(&dataset, 100);
 
 		//left.begin();
 		left.subBoundaries(1, 3, 0);
@@ -61,18 +61,19 @@ int main()
 		right.applyBorder(0.04, 0.04, 0.02, 0.04);
 
 		//grafici.clear();
+		// grafici.plot(axisPlot, dataset, left);
+		// grafici.plot(axisPlot, dataInterpolator, mid);
+		// grafici.plot(axisPlot, dataSpline, right);
+
 		grafici.plot(linePlot, dataset, left);
 		grafici.plot(linePlot, dataInterpolator, mid);
 		grafici.plot(linePlot, dataSpline, right);
-
-		grafici.plot(scatterPlot, dataset, left);
-		grafici.plot(scatterPlot, dataInterpolator, mid);
-		grafici.plot(scatterPlot, dataSpline, right);
 
 		barPlot.thickness = 0.0;
 		grafici.plot(barPlot, dataset, left);
 		grafici.plot(barPlot, dataInterpolator, mid);
 		grafici.plot(barPlot, dataSpline, right);
+
 		//flush to file
 		((File_GFX *)gfx)->flush();
 	}
