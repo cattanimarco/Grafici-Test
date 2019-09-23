@@ -1,6 +1,5 @@
-ARDUINO_DIR = ~/Documents/Arduino/libraries/Grafici
 CCSRC = $(wildcard *.cpp) \
-	$(wildcard arduinoLibrary/*.cpp) \
+	$(wildcard Grafici-GFX/*.cpp) \
 
 OBJ = $(CCSRC:.cpp=.o)
 
