@@ -28,4 +28,4 @@ run: lib test
 .PHONY: clean
 
 clean:$
-	$(RM) $(FixPath) $(exec) prova.bmp
+	$(RM) $(FixPath) $(exec) *.bmp

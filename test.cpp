@@ -1,25 +1,24 @@
 #include "File_GFX.h"
 
-#include "arduinoLibrary/Grafici.h"
+#include "Grafici-GFX/Grafici.h"
 
-#include "arduinoLibrary/plotters/spaghettiPlot.h"
-#include "arduinoLibrary/plotters/barPlot.h"
-#include "arduinoLibrary/plotters/linePlot.h"
-#include "arduinoLibrary/plotters/axisPlot.h"
-#include "arduinoLibrary/plotters/scatterPlot.h"
+#include "Grafici-GFX/plotObjects/barPlot.h"
+#include "Grafici-GFX/plotObjects/linePlot.h"
+#include "Grafici-GFX/plotObjects/axisPlot.h"
+#include "Grafici-GFX/plotObjects/scatterPlot.h"
 
-#include "arduinoLibrary/datasets/DataSetFloat.h"
-#include "arduinoLibrary/decorators/DataSetInterpolator.h"
-#include "arduinoLibrary/decorators/DataSetSpline.h"
-#include "arduinoLibrary/decorators/DataSetHistogram.h"
+#include "Grafici-GFX/datasets/DataSetFloat.h"
+#include "Grafici-GFX/decorators/DataSetInterpolator.h"
+#include "Grafici-GFX/decorators/DataSetSpline.h"
+#include "Grafici-GFX/decorators/DataSetHistogram.h"
 
-#include "arduinoLibrary/colorSchemes/rainbow.h"
-#include "arduinoLibrary/colorSchemes/heat.h"
-#include "arduinoLibrary/colorSchemes/neon.h"
-#include "arduinoLibrary/colorSchemes/france.h"
-#include "arduinoLibrary/colorSchemes/cmyk.h"
-#include "arduinoLibrary/colorSchemes/bright.h"
-#include "arduinoLibrary/colorSchemes/bw.h"
+#include "Grafici-GFX/colorSchemes/rainbow.h"
+#include "Grafici-GFX/colorSchemes/heat.h"
+#include "Grafici-GFX/colorSchemes/neon.h"
+#include "Grafici-GFX/colorSchemes/france.h"
+#include "Grafici-GFX/colorSchemes/cmyk.h"
+#include "Grafici-GFX/colorSchemes/bright.h"
+#include "Grafici-GFX/colorSchemes/bw.h"
 
 //todo make an h file to include all basic essentials
 //#include <iostream>
@@ -73,9 +72,10 @@ int main()
 		grafici.plot(scatterPlot, dataInterpolator, mid);
 		grafici.plot(scatterPlot, dataSpline, right);
 
-		grafici.plot(spaghettiPlot, dataset, left);
-		grafici.plot(spaghettiPlot, dataInterpolator, mid);
-		grafici.plot(spaghettiPlot, dataSpline, right);
+		((BarPlot*)barPlot)->thickness = 0.0;
+		grafici.plot(barPlot, dataset, left);
+		grafici.plot(barPlot, dataInterpolator, mid);
+		grafici.plot(barPlot, dataSpline, right);
 		//flush to file
 		((File_GFX *)gfx)->flush();
 	}
@@ -93,6 +93,8 @@ int main()
 		dataSpline.begin(&dataset, 20);
 
 		ColorPalette colorPalettes[6] = {csRainbow, csBright, csFrance, csCmyk, csHeat, csBw};
+
+		((BarPlot*)barPlot)->thickness = 0.9;
 
 		for (int i = 0; i < 6; i++)
 		{
