@@ -23,10 +23,7 @@
 
 int main()
 {
-	// DataSetFloat dataset;
-	// DataSetInterpolator dataInterpolator;
-	// DataSetSpline dataSpline;
-	// DataSetHistogram dataHist;
+
 
 	{
 		/* usage */
@@ -84,120 +81,125 @@ int main()
 		((File_GFX *)gfx)->flush();
 	}
 
-	// {
-	// 	/* == INTERPOLATION == */
-	// 	//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
-	// 	float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
+	DataSetFloat dataset;
+	DataSetInterpolator dataInterpolator;
+	DataSetSpline dataSpline;
+	DataSetHistogram dataHist;
 
-	// 	Adafruit_GFX *gfx = new File_GFX(1024, 768, "interpolation.bmp");
+	{
+		/* == INTERPOLATION == */
+		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
+		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
 
-	// 	grafici.begin(*gfx);
+		Adafruit_GFX *gfx = new File_GFX(1024, 768, "interpolation.bmp");
 
-	// 	grafici.setColorPalette(csBright);
-	// 	grafici.setColorSource(ColorSource::computeFromX);
+		grafici.begin(*gfx);
 
-	// 	DisplayBoundaries left;
-	// 	DisplayBoundaries mid;
-	// 	DisplayBoundaries right;
+		grafici.setColorPalette(csBright);
+		grafici.setColorSource(ColorSource::computeFromX);
 
-	// 	dataset.begin(dataArrayY, dataArrayY, 13);
-	// 	dataInterpolator.begin(&dataset, 100);
-	// 	dataSpline.begin(&dataset, 100);
+		DisplayBoundaries left;
+		DisplayBoundaries mid;
+		DisplayBoundaries right;
 
-	// 	//left.begin();
-	// 	left.subBoundaries(1, 3, 0);
-	// 	left.applyBorder(0.04, 0.04, 0.04, 0.02);
+		dataset.begin(dataArrayY, dataArrayY, 13);
+		dataInterpolator.begin(&dataset, 100);
+		dataSpline.begin(&dataset, 100);
 
-	// 	//mid.begin();
-	// 	mid.subBoundaries(1, 3, 1);
-	// 	mid.applyBorder(0.04, 0.04, 0.02, 0.02);
+		//left.begin();
+		left.subBoundaries(1, 3, 0);
+		left.applyBorder(0.04, 0.04, 0.04, 0.02);
 
-	// 	//right.begin();
-	// 	right.subBoundaries(1, 3, 2);
-	// 	right.applyBorder(0.04, 0.04, 0.02, 0.04);
+		//mid.begin();
+		mid.subBoundaries(1, 3, 1);
+		mid.applyBorder(0.04, 0.04, 0.02, 0.02);
 
-	// 	grafici.clear();
-	// 	grafici.plot(axisPlot, dataset, left);
-	// 	grafici.plot(axisPlot, dataInterpolator, mid);
-	// 	grafici.plot(axisPlot, dataSpline, right);
+		//right.begin();
+		right.subBoundaries(1, 3, 2);
+		right.applyBorder(0.04, 0.04, 0.02, 0.04);
 
-	// 	grafici.plot(linePlot, dataset, left);
-	// 	grafici.plot(linePlot, dataInterpolator, mid);
-	// 	grafici.plot(linePlot, dataSpline, right);
+		grafici.clear();
+		grafici.plot(axisPlot, dataset, left);
+		grafici.plot(axisPlot, dataInterpolator, mid);
+		grafici.plot(axisPlot, dataSpline, right);
 
-	// 	barPlot.thickness = 0.0;
-	// 	grafici.plot(barPlot, dataset, left);
-	// 	grafici.plot(barPlot, dataInterpolator, mid);
-	// 	grafici.plot(barPlot, dataSpline, right);
+		grafici.plot(linePlot, dataset, left);
+		grafici.plot(linePlot, dataInterpolator, mid);
+		grafici.plot(linePlot, dataSpline, right);
 
-	// 	//flush to file
-	// 	((File_GFX *)gfx)->flush();
-	// }
+		barPlot.thickness = 0.0;
+		grafici.plot(barPlot, dataset, left);
+		grafici.plot(barPlot, dataInterpolator, mid);
+		grafici.plot(barPlot, dataSpline, right);
 
-	// {
-	// 	/* == COLOR SCHEMES == */
-	// 	float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		//flush to file
+		((File_GFX *)gfx)->flush();
+	}
 
-	// 	Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
+	{
+		/* == COLOR SCHEMES == */
+		float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-	// 	grafici.begin(*gfx);
-	// 	grafici.setColorSource(ColorSource::computeFromX);
+		Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
 
-	// 	// dataset - we provide the same array for Y and values so that the color encodes the bar height
-	// 	dataset.begin(dataArrayY, dataArrayY, 11);
-	// 	dataSpline.begin(&dataset, 20);
+		grafici.begin(*gfx);
+		grafici.setColorSource(ColorSource::computeFromX);
 
-	// 	ColorPalette colorPalettes[6] = { csRainbow, csBright, csFrance, csCmyk, csHeat, csBw };
+		// dataset - we provide the same array for Y and values so that the color encodes the bar height
+		dataset.begin(dataArrayY, dataArrayY, 11);
+		dataSpline.begin(&dataset, 20);
 
-	// 	barPlot.thickness = 0.9;
+		ColorPalette colorPalettes[6] = { csRainbow, csBright, csFrance, csCmyk, csHeat, csBw };
 
-	// 	for (int i = 0; i < 6; i++)
-	// 	{
-	// 		DisplayBoundaries boundaries;
-	// 		grafici.setColorPalette(colorPalettes[i]);
+		barPlot.thickness = 0.9;
 
-	// 		boundaries.subBoundaries(2, 3, i);
-	// 		grafici.clear(boundaries);
+		for (int i = 0; i < 6; i++)
+		{
+			DisplayBoundaries boundaries;
+			grafici.setColorPalette(colorPalettes[i]);
 
-	// 		boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
-	// 		grafici.plot(barPlot, dataSpline, boundaries);
-	// 	}
+			boundaries.subBoundaries(2, 3, i);
+			grafici.clear(boundaries);
 
-	// 	//flush to file
-	// 	((File_GFX *)gfx)->flush();
-	// }
+			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
+			grafici.plot(barPlot, dataSpline, boundaries);
+		}
 
-	// {
-	// 	/* == PLOT STYLES == */
-	// 	float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
+		//flush to file
+		((File_GFX *)gfx)->flush();
+	}
 
-	// 	Adafruit_GFX *gfx = new File_GFX(1024, 768, "plot_types.bmp");
+	{
+		/* == PLOT STYLES == */
+		float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
 
-	// 	grafici.begin(*gfx);
-	// 	grafici.setColorSource(ColorSource::computeFromY);
-	// 	grafici.setColorPalette(csCmyk);
-	// 	grafici.clear();
+		Adafruit_GFX *gfx = new File_GFX(1024, 768, "plot_types.bmp");
 
-	// 	// dataset - we provide the same array for Y and values so that the color encodes the bar height
-	// 	dataset.begin(dataArrayY, 1.0, 11);
-	// 	dataSpline.begin(&dataset, 20);
+		grafici.begin(*gfx);
+		grafici.setColorSource(ColorSource::computeFromY);
+		grafici.setColorPalette(csCmyk);
+		grafici.clear();
 
-	// 	PlotObj *plots[6] = { &barcodePlot, &barPlot, &linePlot, &scatterPlot, &linePlot, &linePlot };
+		// dataset - we provide the same array for Y and values so that the color encodes the bar height
+		dataset.begin(dataArrayY, 1.0, 11);
+		dataSpline.begin(&dataset, 20);
 
-	// 	barPlot.thickness = 0.9;
+		PlotObj *plots[6] = { &barcodePlot, &barPlot, &linePlot, &scatterPlot, &linePlot, &linePlot };
 
-	// 	for (int i = 0; i < 6; i++)
-	// 	{
-	// 		DisplayBoundaries boundaries;
-	// 		boundaries.subBoundaries(2, 3, i);
-	// 		boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
+		barPlot.thickness = 0.9;
 
-	// 		grafici.plot(*plots[i], dataSpline, boundaries);
-	// 	}
+		for (int i = 0; i < 6; i++)
+		{
+			DisplayBoundaries boundaries;
+			boundaries.subBoundaries(2, 3, i);
+			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
 
-	// 	//flush to file
-	// 	((File_GFX *)gfx)->flush();
-	// }
+			grafici.plot(*plots[i], dataSpline, boundaries);
+		}
+
+		//flush to file
+		((File_GFX *)gfx)->flush();
+	}
 
 	return 0;
 }
