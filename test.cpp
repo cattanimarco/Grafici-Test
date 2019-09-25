@@ -81,12 +81,13 @@ int main()
 		((File_GFX *)gfx)->flush();
 	}
 
-	DataSetFloat dataset;
+
+
+	{
+			DataSetFloat dataset;
 	DataSetInterpolator dataInterpolator;
 	DataSetSpline dataSpline;
 	DataSetHistogram dataHist;
-
-	{
 		/* == INTERPOLATION == */
 		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
 		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
@@ -95,8 +96,8 @@ int main()
 
 		grafici.begin(*gfx);
 
-		grafici.setColorPalette(csBright);
-		grafici.setColorSource(ColorSource::computeFromX);
+		grafici.style.colorPalette = &csBright;
+		grafici.style.colorSource = ColorSource::computeFromX;
 
 		DisplayBoundaries left;
 		DisplayBoundaries mid;
@@ -137,13 +138,17 @@ int main()
 	}
 
 	{
+			DataSetFloat dataset;
+	DataSetInterpolator dataInterpolator;
+	DataSetSpline dataSpline;
+	DataSetHistogram dataHist;
 		/* == COLOR SCHEMES == */
 		float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
 		Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
 
 		grafici.begin(*gfx);
-		grafici.setColorSource(ColorSource::computeFromX);
+		grafici.style.colorSource = ColorSource::computeFromX;
 
 		// dataset - we provide the same array for Y and values so that the color encodes the bar height
 		dataset.begin(dataArrayY, dataArrayY, 11);
@@ -156,7 +161,7 @@ int main()
 		for (int i = 0; i < 6; i++)
 		{
 			DisplayBoundaries boundaries;
-			grafici.setColorPalette(colorPalettes[i]);
+			grafici.style.colorPalette = &(colorPalettes[i]);
 
 			boundaries.subBoundaries(2, 3, i);
 			grafici.clear(boundaries);
@@ -170,14 +175,18 @@ int main()
 	}
 
 	{
+					DataSetFloat dataset;
+	DataSetInterpolator dataInterpolator;
+	DataSetSpline dataSpline;
+	DataSetHistogram dataHist;
 		/* == PLOT STYLES == */
 		float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
 
 		Adafruit_GFX *gfx = new File_GFX(1024, 768, "plot_types.bmp");
 
 		grafici.begin(*gfx);
-		grafici.setColorSource(ColorSource::computeFromY);
-		grafici.setColorPalette(csCmyk);
+		grafici.style.colorSource = ColorSource::computeFromY;
+		grafici.style.colorPalette = &csCmyk;
 		grafici.clear();
 
 		// dataset - we provide the same array for Y and values so that the color encodes the bar height
