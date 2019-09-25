@@ -61,9 +61,9 @@ int main()
 		right.applyBorder(0.04, 0.04, 0.02, 0.04);
 
 		//grafici.clear();
-		// grafici.plot(axisPlot, dataset, left);
-		// grafici.plot(axisPlot, dataInterpolator, mid);
-		// grafici.plot(axisPlot, dataSpline, right);
+		grafici.plot(axisPlot, dataset, left);
+		grafici.plot(axisPlot, dataInterpolator, mid);
+		grafici.plot(axisPlot, dataSpline, right);
 
 		grafici.plot(linePlot, dataset, left);
 		grafici.plot(linePlot, dataInterpolator, mid);
