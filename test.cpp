@@ -29,6 +29,41 @@ int main()
 	DataSetHistogram dataHist;
 
 	{
+		/* usage */
+		DataSetFloat dataset;
+		float dataArray[5] = { 1, 0, 2, 0, 1 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/usage.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 5);
+
+		grafici.clear();
+		grafici.plot(linePlot, dataset);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* data interpolation */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+
+		float dataArray[5] = { 1, 0, 2, 0, 1 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/interpolation.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 5);
+		dataSpline.begin(&dataset, 100);
+
+		grafici.clear();
+		grafici.plot(linePlot, dataSpline);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
 		/* == INTERPOLATION == */
 		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
 		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
@@ -60,7 +95,7 @@ int main()
 		right.subBoundaries(1, 3, 2);
 		right.applyBorder(0.04, 0.04, 0.02, 0.04);
 
-		//grafici.clear();
+		grafici.clear();
 		grafici.plot(axisPlot, dataset, left);
 		grafici.plot(axisPlot, dataInterpolator, mid);
 		grafici.plot(axisPlot, dataSpline, right);
