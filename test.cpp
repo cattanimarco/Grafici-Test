@@ -24,7 +24,6 @@
 int main()
 {
 
-
 	{
 		/* usage */
 		DataSetFloat dataset;
@@ -65,7 +64,7 @@ int main()
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
 		DataSetHistogram dataHist;
-		
+
 		float dataArray[5] = { 1, 0, 2, 0, 1 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/histogram.bmp");
@@ -81,13 +80,11 @@ int main()
 		((File_GFX *)gfx)->flush();
 	}
 
-
-
 	{
-			DataSetFloat dataset;
-	DataSetInterpolator dataInterpolator;
-	DataSetSpline dataSpline;
-	DataSetHistogram dataHist;
+		DataSetFloat dataset;
+		DataSetInterpolator dataInterpolator;
+		DataSetSpline dataSpline;
+		DataSetHistogram dataHist;
 		/* == INTERPOLATION == */
 		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
 		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
@@ -99,49 +96,42 @@ int main()
 		grafici.style.colorPalette = &csBright;
 		grafici.style.colorSource = ColorSource::computeFromX;
 
-		DisplayBoundaries left;
-		DisplayBoundaries mid;
-		DisplayBoundaries right;
-
 		dataset.begin(dataArrayY, dataArrayY, 13);
 		dataInterpolator.begin(&dataset, 100);
 		dataSpline.begin(&dataset, 100);
 
-		//left.begin();
-		left.subBoundaries(1, 3, 0);
-		left.applyBorder(0.04, 0.04, 0.04, 0.02);
-
-		//mid.begin();
-		mid.subBoundaries(1, 3, 1);
-		mid.applyBorder(0.04, 0.04, 0.02, 0.02);
-
-		//right.begin();
-		right.subBoundaries(1, 3, 2);
-		right.applyBorder(0.04, 0.04, 0.02, 0.04);
-
 		grafici.clear();
-		grafici.plot(axisPlot, dataset, left);
-		grafici.plot(axisPlot, dataInterpolator, mid);
-		grafici.plot(axisPlot, dataSpline, right);
-
-		grafici.plot(linePlot, dataset, left);
-		grafici.plot(linePlot, dataInterpolator, mid);
-		grafici.plot(linePlot, dataSpline, right);
-
 		barPlot.thickness = 0.0;
-		grafici.plot(barPlot, dataset, left);
-		grafici.plot(barPlot, dataInterpolator, mid);
-		grafici.plot(barPlot, dataSpline, right);
+
+		grafici.boundaries.subBoundaries(1, 3, 0);
+		grafici.boundaries.applyBorder(0.04, 0.04, 0.04, 0.02);
+		grafici.plot(axisPlot, dataset);
+		grafici.plot(linePlot, dataset);
+		grafici.plot(barPlot, dataset);
+
+		grafici.boundaries.reset();
+		grafici.boundaries.subBoundaries(1, 3, 1);
+		grafici.boundaries.applyBorder(0.04, 0.04, 0.02, 0.02);
+		grafici.plot(axisPlot, dataInterpolator);
+		grafici.plot(linePlot, dataInterpolator);
+		grafici.plot(barPlot, dataInterpolator);
+
+		grafici.boundaries.reset();
+		grafici.boundaries.subBoundaries(1, 3, 2);
+		grafici.boundaries.applyBorder(0.04, 0.04, 0.02, 0.04);
+		grafici.plot(axisPlot, dataSpline);
+		grafici.plot(linePlot, dataSpline);
+		grafici.plot(barPlot, dataSpline);
 
 		//flush to file
 		((File_GFX *)gfx)->flush();
 	}
 
 	{
-			DataSetFloat dataset;
-	DataSetInterpolator dataInterpolator;
-	DataSetSpline dataSpline;
-	DataSetHistogram dataHist;
+		DataSetFloat dataset;
+		DataSetInterpolator dataInterpolator;
+		DataSetSpline dataSpline;
+		DataSetHistogram dataHist;
 		/* == COLOR SCHEMES == */
 		float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
@@ -175,10 +165,10 @@ int main()
 	}
 
 	{
-					DataSetFloat dataset;
-	DataSetInterpolator dataInterpolator;
-	DataSetSpline dataSpline;
-	DataSetHistogram dataHist;
+		DataSetFloat dataset;
+		DataSetInterpolator dataInterpolator;
+		DataSetSpline dataSpline;
+		DataSetHistogram dataHist;
 		/* == PLOT STYLES == */
 		float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
 

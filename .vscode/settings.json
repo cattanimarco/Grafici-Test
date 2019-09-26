@@ -1,4 +1,7 @@
 {
     "clang-format.language.c.style": "File",
-    "clang-format.language.cpp.style": "File"
+    "clang-format.language.cpp.style": "File",
+    "files.associations": {
+        "ios": "cpp"
+    }
 }
