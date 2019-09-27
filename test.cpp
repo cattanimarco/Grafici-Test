@@ -81,6 +81,57 @@ int main()
 	}
 
 	{
+		/* Subplot */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+
+		float dataArray[5] = { 1, 0, 2, 0, 1 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/subplot.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 5);
+		dataSpline.begin(&dataset, 100);
+
+		grafici.clear();
+
+		// set boundaries to full screen
+		// divide screen in 2 colum and select first one
+		// add empty border
+		grafici.boundaries.reset().subBoundaries(1, 2, 0).applyBorder(0.04, 0.04, 0.04, 0.02);
+		grafici.plot(linePlot, dataSpline);
+
+		// set boundaries to full screen
+		// divide screen in 2 colum and select first one
+		// add empty border
+		grafici.boundaries.reset().subBoundaries(1, 2, 1).applyBorder(0.04, 0.04, 0.02, 0.04);
+		grafici.plot(barPlot, dataSpline);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* Multiplot */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+
+		float dataArray[5] = { 1, 0, 2, 0, 1 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/multiplot.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 5);
+		dataSpline.begin(&dataset, 100);
+
+		grafici.clear();
+		grafici.boundaries.reset().applyBorder(0.04, 0.04, 0.04, 0.04); // add empty border
+		grafici.plot(linePlot, dataSpline);                             // keep the same boundaries and plot multiple times
+		grafici.plot(scatterPlot, dataSpline);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
 		DataSetFloat dataset;
 		DataSetInterpolator dataInterpolator;
 		DataSetSpline dataSpline;
