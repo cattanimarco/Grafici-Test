@@ -98,13 +98,13 @@ int main()
 		// set boundaries to full screen
 		// divide screen in 2 colum and select first one
 		// add empty border
-		grafici.boundaries.reset().subBoundaries(1, 2, 0).applyBorder(0.04, 0.04, 0.04, 0.02);
+		grafici.boundaries.reset().crop(1, 2, 0).addBorder(0.04, 0.04, 0.04, 0.02);
 		grafici.plot(linePlot, dataSpline);
 
 		// set boundaries to full screen
 		// divide screen in 2 colum and select first one
 		// add empty border
-		grafici.boundaries.reset().subBoundaries(1, 2, 1).applyBorder(0.04, 0.04, 0.02, 0.04);
+		grafici.boundaries.reset().crop(1, 2, 1).addBorder(0.04, 0.04, 0.02, 0.04);
 		grafici.plot(barPlot, dataSpline);
 
 		((File_GFX *)gfx)->flush();
@@ -124,7 +124,7 @@ int main()
 		dataSpline.begin(&dataset, 100);
 
 		grafici.clear();
-		grafici.boundaries.reset().applyBorder(0.04, 0.04, 0.04, 0.04); // add empty border
+		grafici.boundaries.reset().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
 		grafici.plot(linePlot, dataSpline);                             // keep the same boundaries and plot multiple times
 		grafici.plot(scatterPlot, dataSpline);
 
@@ -154,22 +154,22 @@ int main()
 		grafici.clear();
 		barPlot.thickness = 0.0;
 
-		grafici.boundaries.subBoundaries(1, 3, 0);
-		grafici.boundaries.applyBorder(0.04, 0.04, 0.04, 0.02);
+		grafici.boundaries.crop(1, 3, 0);
+		grafici.boundaries.addBorder(0.04, 0.04, 0.04, 0.02);
 		grafici.plot(axisPlot, dataset);
 		grafici.plot(linePlot, dataset);
 		grafici.plot(barPlot, dataset);
 
 		grafici.boundaries.reset();
-		grafici.boundaries.subBoundaries(1, 3, 1);
-		grafici.boundaries.applyBorder(0.04, 0.04, 0.02, 0.02);
+		grafici.boundaries.crop(1, 3, 1);
+		grafici.boundaries.addBorder(0.04, 0.04, 0.02, 0.02);
 		grafici.plot(axisPlot, dataInterpolator);
 		grafici.plot(linePlot, dataInterpolator);
 		grafici.plot(barPlot, dataInterpolator);
 
 		grafici.boundaries.reset();
-		grafici.boundaries.subBoundaries(1, 3, 2);
-		grafici.boundaries.applyBorder(0.04, 0.04, 0.02, 0.04);
+		grafici.boundaries.crop(1, 3, 2);
+		grafici.boundaries.addBorder(0.04, 0.04, 0.02, 0.04);
 		grafici.plot(axisPlot, dataSpline);
 		grafici.plot(linePlot, dataSpline);
 		grafici.plot(barPlot, dataSpline);
@@ -204,10 +204,10 @@ int main()
 			DisplayBoundaries boundaries;
 			grafici.style.colorPalette = &(colorPalettes[i]);
 
-			boundaries.subBoundaries(2, 3, i);
+			boundaries.crop(2, 3, i);
 			grafici.clear(boundaries);
 
-			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
+			boundaries.addBorder(0.02, 0.02, 0.02, 0.02);
 			grafici.plot(barPlot, dataSpline, boundaries);
 		}
 
@@ -241,8 +241,8 @@ int main()
 		for (int i = 0; i < 6; i++)
 		{
 			DisplayBoundaries boundaries;
-			boundaries.subBoundaries(2, 3, i);
-			boundaries.applyBorder(0.02, 0.02, 0.02, 0.02);
+			boundaries.crop(2, 3, i);
+			boundaries.addBorder(0.02, 0.02, 0.02, 0.02);
 
 			grafici.plot(*plots[i], dataSpline, boundaries);
 		}
