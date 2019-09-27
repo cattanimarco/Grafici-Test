@@ -27,7 +27,7 @@ int main()
 	{
 		/* usage */
 		DataSetFloat dataset;
-		float dataArray[5] = { 1, 0, 2, 0, 1 };
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/usage.bmp");
 
@@ -45,7 +45,7 @@ int main()
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
 
-		float dataArray[5] = { 1, 0, 2, 0, 1 };
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/interpolation.bmp");
 
@@ -65,7 +65,7 @@ int main()
 		DataSetSpline dataSpline;
 		DataSetHistogram dataHist;
 
-		float dataArray[5] = { 1, 0, 2, 0, 1 };
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/histogram.bmp");
 
@@ -85,7 +85,7 @@ int main()
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
 
-		float dataArray[5] = { 1, 0, 2, 0, 1 };
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/subplot.bmp");
 
@@ -115,7 +115,7 @@ int main()
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
 
-		float dataArray[5] = { 1, 0, 2, 0, 1 };
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/multiplot.bmp");
 
