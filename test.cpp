@@ -125,8 +125,41 @@ int main()
 
 		grafici.clear();
 		grafici.boundaries.reset().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
-		grafici.plot(linePlot, dataSpline);                             // keep the same boundaries and plot multiple times
+		grafici.plot(linePlot, dataSpline);                           // keep the same boundaries and plot multiple times
 		grafici.plot(scatterPlot, dataSpline);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* Subplot */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/transformations.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 5);
+		dataSpline.begin(&dataset, 100);
+
+		grafici.clear();
+
+		grafici.boundaries.reset().crop(2, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.plot(barPlot, dataSpline);
+
+		grafici.boundaries.reset().crop(2, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.boundaries.horizzontalFlip();
+		grafici.plot(barPlot, dataSpline);
+
+		grafici.boundaries.reset().crop(2, 2, 2).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.boundaries.verticalFlip();
+		grafici.plot(barPlot, dataSpline);
+
+		grafici.boundaries.reset().crop(2, 2, 3).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.boundaries.horizzontalFlip().verticalFlip();
+		grafici.plot(barPlot, dataSpline);
 
 		((File_GFX *)gfx)->flush();
 	}
