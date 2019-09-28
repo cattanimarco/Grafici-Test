@@ -51,7 +51,7 @@ int main()
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(&dataset, 100);
+		dataSpline.begin(dataset, 100);
 
 		grafici.clear();
 		grafici.plot(linePlot, dataSpline);
@@ -71,8 +71,8 @@ int main()
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(&dataset, 100); // interpolate 5 point to 100 points
-		dataHist.begin(&dataSpline, 15); // histogram of interpolation
+		dataSpline.begin(dataset, 100); // interpolate 5 point to 100 points
+		dataHist.begin(dataSpline, 15); // histogram of interpolation
 
 		grafici.clear();
 		grafici.plot(barPlot, dataHist);
@@ -91,7 +91,7 @@ int main()
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(&dataset, 100);
+		dataSpline.begin(dataset, 100);
 
 		grafici.clear();
 
@@ -121,7 +121,7 @@ int main()
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(&dataset, 100);
+		dataSpline.begin(dataset, 100);
 
 		grafici.clear();
 		grafici.boundaries.reset().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
@@ -142,7 +142,7 @@ int main()
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(&dataset, 100);
+		dataSpline.begin(dataset, 100);
 
 		grafici.clear();
 
@@ -181,8 +181,8 @@ int main()
 		grafici.style.colorSource = ColorSource::computeFromX;
 
 		dataset.begin(dataArrayY, dataArrayY, 13);
-		dataInterpolator.begin(&dataset, 100);
-		dataSpline.begin(&dataset, 100);
+		dataInterpolator.begin(dataset, 100);
+		dataSpline.begin(dataset, 100);
 
 		grafici.clear();
 		barPlot.thickness = 0.0;
@@ -226,7 +226,7 @@ int main()
 
 		// dataset - we provide the same array for Y and values so that the color encodes the bar height
 		dataset.begin(dataArrayY, dataArrayY, 11);
-		dataSpline.begin(&dataset, 20);
+		dataSpline.begin(dataset, 20);
 
 		ColorPalette colorPalettes[6] = { csRainbow, csBright, csFrance, csCmyk, csHeat, csBw };
 
@@ -265,7 +265,7 @@ int main()
 
 		// dataset - we provide the same array for Y and values so that the color encodes the bar height
 		dataset.begin(dataArrayY, 1.0, 11);
-		dataSpline.begin(&dataset, 20);
+		dataSpline.begin(dataset, 20);
 
 		PlotObj *plots[6] = { &barcodePlot, &barPlot, &linePlot, &scatterPlot, &linePlot, &linePlot };
 
