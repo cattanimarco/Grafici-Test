@@ -72,7 +72,7 @@ int main()
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100); // interpolate 5 point to 100 points
-		dataHist.begin(dataSpline, 15); // histogram of interpolation
+		dataHist.begin(dataSpline, 50); // histogram of interpolation
 
 		grafici.clear();
 		grafici.plot(barPlot, dataHist);
@@ -160,6 +160,42 @@ int main()
 		grafici.boundaries.reset().crop(2, 2, 3).addBorder(0.02, 0.02, 0.02, 0.02);
 		grafici.boundaries.horizzontalFlip().verticalFlip();
 		grafici.plot(barPlot, dataSpline);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* Subplot */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+
+		float dataArray[5] = { 1, 0, 2, 1, 2 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/types.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 5);
+		dataSpline.begin(dataset, 30);
+
+		grafici.clear();
+		grafici.style.colorPalette = &csBright;
+		grafici.style.colorSource = ColorSource::computeFromY;
+
+		grafici.boundaries.reset().crop(2, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.plot(axisPlot, dataSpline);
+		grafici.plot(linePlot, dataSpline);
+
+		grafici.boundaries.reset().crop(2, 3, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.plot(axisPlot, dataSpline);
+		grafici.plot(barPlot, dataSpline);
+
+		grafici.boundaries.reset().crop(2, 3, 2).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.plot(axisPlot, dataSpline);
+		grafici.plot(scatterPlot, dataSpline);
+
+		grafici.boundaries.reset().crop(2, 3, 3).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.plot(axisPlot, dataSpline);
+		grafici.plot(barcodePlot, dataSpline);
 
 		((File_GFX *)gfx)->flush();
 	}
