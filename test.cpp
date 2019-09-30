@@ -72,7 +72,7 @@ int main()
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100); // interpolate 5 point to 100 points
-		dataHist.begin(dataSpline, 50); // histogram of interpolation
+		dataHist.begin(dataSpline, 30); // histogram of interpolation
 
 		grafici.clear();
 		grafici.plot(barPlot, dataHist);
@@ -132,7 +132,7 @@ int main()
 	}
 
 	{
-		/* Subplot */
+		/* Transformations */
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
 
@@ -178,24 +178,85 @@ int main()
 		dataSpline.begin(dataset, 30);
 
 		grafici.clear();
-		grafici.style.colorPalette = &csBright;
-		grafici.style.colorSource = ColorSource::computeFromY;
+		axisPlot.numAxisX = 9;
+		axisPlot.numAxisY = 3;
 
-		grafici.boundaries.reset().crop(2, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.boundaries.reset().crop(1, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
 		grafici.plot(axisPlot, dataSpline);
 		grafici.plot(linePlot, dataSpline);
 
-		grafici.boundaries.reset().crop(2, 3, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.boundaries.reset().crop(1, 3, 1).addBorder(0.02, 0.02, 0.02, 0.02);
 		grafici.plot(axisPlot, dataSpline);
 		grafici.plot(barPlot, dataSpline);
 
-		grafici.boundaries.reset().crop(2, 3, 2).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.boundaries.reset().crop(1, 3, 2).addBorder(0.02, 0.02, 0.02, 0.02);
 		grafici.plot(axisPlot, dataSpline);
 		grafici.plot(scatterPlot, dataSpline);
 
-		grafici.boundaries.reset().crop(2, 3, 3).addBorder(0.02, 0.02, 0.02, 0.02);
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* Round 1 */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+		RoundDisplayBoundaries roundBoundaries;
+
+		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
+
+		Adafruit_GFX *gfx = new File_GFX(480, 240, "imgs/round_1.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 9);
+		dataSpline.begin(dataset, 100);
+		axisPlot.numAxisX = 10;
+		axisPlot.numAxisY = 4;
+
+		grafici.clear();
+
+		grafici.boundaries.reset().crop(1, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
 		grafici.plot(axisPlot, dataSpline);
-		grafici.plot(barcodePlot, dataSpline);
+		grafici.plot(barPlot, dataSpline);
+
+		roundBoundaries.reset().crop(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+		grafici.plot(axisPlot, dataSpline, roundBoundaries);
+		grafici.plot(barPlot, dataSpline, roundBoundaries);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* Round 2 */
+		DataSetFloat dataset;
+		DataSetSpline dataSpline;
+		RoundDisplayBoundaries roundBoundaries;
+
+		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
+
+		Adafruit_GFX *gfx = new File_GFX(480, 240, "imgs/round_2.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 9);
+		dataSpline.begin(dataset, 100);
+		axisPlot.numAxisX = 10;
+		axisPlot.numAxisY = 4;
+
+		grafici.clear();
+
+		roundBoundaries.reset().crop(1, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+		roundBoundaries.cropRadial(1, 2, 0);
+		grafici.plot(axisPlot, dataSpline, roundBoundaries);
+		grafici.plot(barPlot, dataSpline, roundBoundaries);
+
+		roundBoundaries.reset().crop(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+		roundBoundaries.cropRadial(2, 2, 0);
+		grafici.plot(axisPlot, dataSpline, roundBoundaries);
+		grafici.plot(barPlot, dataSpline, roundBoundaries);
+
+		roundBoundaries.reset().crop(1, 2, 1);
+		roundBoundaries.cropRadial(2, 2, 2);
+		grafici.plot(axisPlot, dataSpline, roundBoundaries);
+		grafici.plot(linePlot, dataSpline, roundBoundaries);
 
 		((File_GFX *)gfx)->flush();
 	}
