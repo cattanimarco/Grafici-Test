@@ -29,7 +29,7 @@ int main()
 		DataSetFloat dataset;
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/usage.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/usage.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -47,7 +47,7 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/interpolation.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/interpolation.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -67,7 +67,7 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/histogram.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/histogram.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -87,7 +87,7 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/subplot.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/subplot.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -117,7 +117,7 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/multiplot.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/multiplot.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -138,7 +138,7 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/transformations.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/transformations.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -171,7 +171,7 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 240, "imgs/types.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/types.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
@@ -204,7 +204,7 @@ int main()
 
 		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-		Adafruit_GFX *gfx = new File_GFX(480, 240, "imgs/round_1.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/round_1.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 9);
@@ -233,7 +233,7 @@ int main()
 
 		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-		Adafruit_GFX *gfx = new File_GFX(480, 240, "imgs/round_2.bmp");
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/round_2.bmp");
 
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 9);
