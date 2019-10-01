@@ -19,6 +19,7 @@
 #include "Grafici-GFX/colorSchemes/france.h"
 #include "Grafici-GFX/colorSchemes/heat.h"
 #include "Grafici-GFX/colorSchemes/neon.h"
+#include "Grafici-GFX/colorSchemes/parula.h"
 #include "Grafici-GFX/colorSchemes/rainbow.h"
 
 int main()
@@ -122,6 +123,7 @@ int main()
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
+		scatterPlot.markerSize = 0.0005; // this is defined a proportion of the area of the plot
 
 		grafici.clear();
 		grafici.boundaries.reset().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
@@ -180,6 +182,7 @@ int main()
 		grafici.clear();
 		axisPlot.numAxisX = 9;
 		axisPlot.numAxisY = 3;
+		scatterPlot.markerSize = 0.0001;
 
 		grafici.boundaries.reset().crop(1, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
 		grafici.plot(axisPlot, dataSpline);
@@ -249,14 +252,51 @@ int main()
 		grafici.plot(barPlot, dataSpline, roundBoundaries);
 
 		roundBoundaries.reset().crop(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-		roundBoundaries.cropRadial(2, 2, 0);
+		roundBoundaries.addBorderRadial(0.5, 0.1, 0.25, 0);
 		grafici.plot(axisPlot, dataSpline, roundBoundaries);
 		grafici.plot(barPlot, dataSpline, roundBoundaries);
 
 		roundBoundaries.reset().crop(1, 2, 1);
-		roundBoundaries.cropRadial(2, 2, 2);
+		roundBoundaries.addBorderRadial(0, 0.6, 0.25, 0);
 		grafici.plot(axisPlot, dataSpline, roundBoundaries);
 		grafici.plot(linePlot, dataSpline, roundBoundaries);
+
+		((File_GFX *)gfx)->flush();
+	}
+
+	{
+		/* Round 2 */
+		DataSetFloat dataset;
+		DataSetInterpolator dataInterpolator;
+		RoundDisplayBoundaries roundBoundaries;
+
+		float dataArray[6] = { 1, 2, 2, 2, 2, 2 };
+
+		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/colors.bmp");
+
+		grafici.begin(*gfx);
+		dataset.begin(dataArray, 1, 6);
+		dataInterpolator.begin(dataset, 100);
+		grafici.style.colorSource = ColorSource::computeFromX;
+
+		grafici.clear();
+
+		ColorPalette *colorPlots[] = { &csBright,
+			                           &csBw,
+			                           &csCmyk,
+			                           &csFrance,
+			                           &csHeat,
+			                           &csNeon,
+			                           &csParula,
+			                           &csRainbow };
+
+		for (int i = 0; i < 8; i++)
+		{
+			grafici.style.colorPalette = colorPlots[i];
+			roundBoundaries.reset().crop(2, 4, i).addBorder(0.02, 0.02, 0.02, 0.02);
+			roundBoundaries.addBorderRadial(0, 0.25, 0, 0);
+			grafici.plot(barPlot, dataInterpolator, roundBoundaries);
+		}
 
 		((File_GFX *)gfx)->flush();
 	}
