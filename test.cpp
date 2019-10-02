@@ -66,7 +66,7 @@ int main()
 		DataSetSpline dataSpline;
 		DataSetHistogram dataHist;
 
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		float dataArray[5] = { 1, 0, 2, 2, 1 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/histogram.bmp");
 
@@ -123,7 +123,7 @@ int main()
 		grafici.begin(*gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
-		scatterPlot.markerSize = 0.0005; // this is defined a proportion of the area of the plot
+		scatterPlot.markerSize = 0.0002; // this is defined a proportion of the area of the plot
 
 		grafici.clear();
 		grafici.boundaries.reset().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
@@ -265,7 +265,7 @@ int main()
 	}
 
 	{
-		/* Round 2 */
+		/* Colors */
 		DataSetFloat dataset;
 		DataSetInterpolator dataInterpolator;
 		RoundDisplayBoundaries roundBoundaries;
@@ -282,18 +282,18 @@ int main()
 
 		grafici.clear();
 
-		ColorPalette *colorPlots[] = { &csBright,
-			                           &csBw,
-			                           &csCmyk,
-			                           &csFrance,
-			                           &csHeat,
-			                           &csNeon,
-			                           &csParula,
-			                           &csRainbow };
+		ColorPalette colorPlots[] = { csBright,
+			                           csBw,
+			                           csCmyk,
+			                           csFrance,
+			                           csHeat,
+			                           csNeon,
+			                           csParula,
+			                           csRainbow };
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < sizeof(colorPlots)/sizeof(ColorPalette); i++)
 		{
-			grafici.style.colorPalette = colorPlots[i];
+			grafici.style.setPalette(colorPlots[i]);
 			roundBoundaries.reset().crop(2, 4, i).addBorder(0.02, 0.02, 0.02, 0.02);
 			roundBoundaries.addBorderRadial(0, 0.25, 0, 0);
 			grafici.plot(barPlot, dataInterpolator, roundBoundaries);
