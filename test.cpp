@@ -270,12 +270,13 @@ int main()
 		DataSetInterpolator dataInterpolator;
 		RoundDisplayBoundaries roundBoundaries;
 
-		float dataArray[6] = { 1, 2, 2, 2, 2, 2 };
+		float dataArray[2] = { 2, 2 };
 
 		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/colors.bmp");
 
 		grafici.begin(*gfx);
-		dataset.begin(dataArray, 1, 6);
+		dataset.begin(dataArray, 1, 2);
+		dataset.yMin = 0; /* ovverride min value */
 		dataInterpolator.begin(dataset, 100);
 		grafici.style.colorSource = ColorSource::computeFromX;
 
