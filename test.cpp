@@ -30,15 +30,15 @@ int main()
 		DataSetFloat dataset;
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/usage.bmp");
+		File_GFX gfx(640, 320, "imgs/usage.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 
 		grafici.clear();
 		grafici.plot(linePlot, dataset);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -48,16 +48,16 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/interpolation.bmp");
+		File_GFX gfx(640, 320, "imgs/interpolation.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
 
 		grafici.clear();
 		grafici.plot(linePlot, dataSpline);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -68,9 +68,9 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 2, 1 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/histogram.bmp");
+		File_GFX gfx(640, 320, "imgs/histogram.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100); // interpolate 5 point to 100 points
 		dataHist.begin(dataSpline, 30); // histogram of interpolation
@@ -78,7 +78,7 @@ int main()
 		grafici.clear();
 		grafici.plot(barPlot, dataHist);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -88,9 +88,9 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/subplot.bmp");
+		File_GFX gfx(640, 320, "imgs/subplot.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
 
@@ -108,7 +108,7 @@ int main()
 		grafici.boundaries.reset().crop(1, 2, 1).addBorder(0.04, 0.04, 0.02, 0.04);
 		grafici.plot(barPlot, dataSpline);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -118,9 +118,9 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/multiplot.bmp");
+		File_GFX gfx(640, 320, "imgs/multiplot.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
 		scatterPlot.markerSize = 0.0002; // this is defined a proportion of the area of the plot
@@ -130,7 +130,7 @@ int main()
 		grafici.plot(linePlot, dataSpline);                           // keep the same boundaries and plot multiple times
 		grafici.plot(scatterPlot, dataSpline);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -140,9 +140,9 @@ int main()
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/transformations.bmp");
+		File_GFX gfx(640, 320, "imgs/transformations.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
 
@@ -163,19 +163,19 @@ int main()
 		grafici.boundaries.horizzontalFlip().verticalFlip();
 		grafici.plot(barPlot, dataSpline);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
-		/* Subplot */
+		/* Styles */
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
 
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/types.bmp");
+		File_GFX gfx(640, 320, "imgs/styles.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 30);
 
@@ -196,7 +196,7 @@ int main()
 		grafici.plot(axisPlot, dataSpline);
 		grafici.plot(scatterPlot, dataSpline);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -207,9 +207,9 @@ int main()
 
 		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/round_1.bmp");
+		File_GFX gfx(640, 320, "imgs/round_1.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 9);
 		dataSpline.begin(dataset, 100);
 		axisPlot.numAxisX = 10;
@@ -225,7 +225,7 @@ int main()
 		grafici.plot(axisPlot, dataSpline, roundBoundaries);
 		grafici.plot(barPlot, dataSpline, roundBoundaries);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -236,9 +236,9 @@ int main()
 
 		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/round_2.bmp");
+		File_GFX gfx(640, 320, "imgs/round_2.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 9);
 		dataSpline.begin(dataset, 100);
 		axisPlot.numAxisX = 10;
@@ -261,7 +261,7 @@ int main()
 		grafici.plot(axisPlot, dataSpline, roundBoundaries);
 		grafici.plot(linePlot, dataSpline, roundBoundaries);
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
@@ -272,9 +272,9 @@ int main()
 
 		float dataArray[2] = { 2, 2 };
 
-		Adafruit_GFX *gfx = new File_GFX(640, 320, "imgs/colors.bmp");
+		File_GFX gfx(640, 320, "imgs/colors.bmp");
 
-		grafici.begin(*gfx);
+		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 2);
 		dataset.yMin = 0; /* ovverride min value */
 		dataInterpolator.begin(dataset, 100);
@@ -299,7 +299,7 @@ int main()
 			grafici.plot(barPlot, dataInterpolator, roundBoundaries);
 		}
 
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	{
