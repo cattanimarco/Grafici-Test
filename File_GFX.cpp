@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-File_GFX::File_GFX(int width, int height, std::string filename) : Adafruit_GFX(width, height), filename(filename)
+File_GFX::File_GFX(int width, int height, const char *  filename) : Adafruit_GFX(width, height), filename(filename)
 {
 	// Create image
 	hDib = ezd_create(width, height, 24, 0);
@@ -20,5 +20,5 @@ void File_GFX::drawPixel(int16_t x, int16_t y, uint16_t color)
 
 void File_GFX::flush(void)
 {
-	ezd_save(hDib, filename.c_str());
+	ezd_save(hDib, filename);
 }
