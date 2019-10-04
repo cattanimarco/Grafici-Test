@@ -2,25 +2,25 @@
 
 #include "Grafici-GFX/Grafici.h"
 
-#include "Grafici-GFX/plotObjects/axisPlot.h"
-#include "Grafici-GFX/plotObjects/barPlot.h"
-#include "Grafici-GFX/plotObjects/barcodePlot.h"
-#include "Grafici-GFX/plotObjects/linePlot.h"
-#include "Grafici-GFX/plotObjects/scatterPlot.h"
+#include "Grafici-GFX/utility/axisPlot.h"
+#include "Grafici-GFX/utility/barPlot.h"
+#include "Grafici-GFX/utility/barcodePlot.h"
+#include "Grafici-GFX/utility/linePlot.h"
+#include "Grafici-GFX/utility/scatterPlot.h"
 
-#include "Grafici-GFX/datasets/DataSetFloat.h"
-#include "Grafici-GFX/decorators/DataSetHistogram.h"
-#include "Grafici-GFX/decorators/DataSetInterpolator.h"
-#include "Grafici-GFX/decorators/DataSetSpline.h"
+#include "Grafici-GFX/utility/DataSetFloat.h"
+#include "Grafici-GFX/utility/DataSetHistogram.h"
+#include "Grafici-GFX/utility/DataSetInterpolator.h"
+#include "Grafici-GFX/utility/DataSetSpline.h"
 
-#include "Grafici-GFX/colorSchemes/bright.h"
-#include "Grafici-GFX/colorSchemes/bw.h"
-#include "Grafici-GFX/colorSchemes/cmyk.h"
-#include "Grafici-GFX/colorSchemes/france.h"
-#include "Grafici-GFX/colorSchemes/heat.h"
-#include "Grafici-GFX/colorSchemes/neon.h"
-#include "Grafici-GFX/colorSchemes/parula.h"
-#include "Grafici-GFX/colorSchemes/rainbow.h"
+#include "Grafici-GFX/utility/bright.h"
+#include "Grafici-GFX/utility/bw.h"
+#include "Grafici-GFX/utility/cmyk.h"
+#include "Grafici-GFX/utility/france.h"
+#include "Grafici-GFX/utility/heat.h"
+#include "Grafici-GFX/utility/neon.h"
+#include "Grafici-GFX/utility/parula.h"
+#include "Grafici-GFX/utility/rainbow.h"
 
 int main()
 {
