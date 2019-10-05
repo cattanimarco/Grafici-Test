@@ -26,11 +26,11 @@ int main()
 {
 
 	{
-		/* usage */
+		/* simple_plot */
 		DataSetFloat dataset;
 		float dataArray[5] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(640, 320, "imgs/usage.bmp");
+		File_GFX gfx(640, 320, "imgs/simple_plot.bmp");
 
 		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
