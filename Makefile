@@ -1,6 +1,6 @@
 CCSRC = $(wildcard *.cpp) \
-	$(wildcard Grafici-GFX/*.cpp) \
-	$(wildcard Grafici-GFX/utility/*.cpp) \
+	$(wildcard Grafici-GFX/src/*.cpp) \
+	$(wildcard Grafici-GFX/src/modules/*.cpp) \
 
 OBJ = $(CCSRC:.cpp=.o)
 
