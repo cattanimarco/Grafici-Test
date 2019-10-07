@@ -1,26 +1,19 @@
 #include "File_GFX.h"
 
 #include "Grafici-GFX/src/Grafici.h"
-#include "Grafici-GFX/src/modules/axisPlot.h"
-#include "Grafici-GFX/src/modules/barPlot.h"
-#include "Grafici-GFX/src/modules/barcodePlot.h"
-#include "Grafici-GFX/src/modules/linePlot.h"
-#include "Grafici-GFX/src/modules/scatterPlot.h"
-#include "Grafici-GFX/src/modules/DataSetFloat.h"
-#include "Grafici-GFX/src/modules/DataSetHistogram.h"
-#include "Grafici-GFX/src/modules/DataSetInterpolator.h"
-#include "Grafici-GFX/src/modules/DataSetSpline.h"
-#include "Grafici-GFX/src/modules/bright.h"
-#include "Grafici-GFX/src/modules/bw.h"
-#include "Grafici-GFX/src/modules/cmyk.h"
-#include "Grafici-GFX/src/modules/france.h"
-#include "Grafici-GFX/src/modules/heat.h"
-#include "Grafici-GFX/src/modules/neon.h"
-#include "Grafici-GFX/src/modules/parula.h"
-#include "Grafici-GFX/src/modules/rainbow.h"
+#include "Grafici-GFX/src/plots/axisPlot.h"
+#include "Grafici-GFX/src/plots/barPlot.h"
+#include "Grafici-GFX/src/plots/barcodePlot.h"
+#include "Grafici-GFX/src/plots/linePlot.h"
+#include "Grafici-GFX/src/plots/scatterPlot.h"
+#include "Grafici-GFX/src/data/DataSetFloat.h"
+#include "Grafici-GFX/src/data/DataSetHistogram.h"
+#include "Grafici-GFX/src/data/DataSetInterpolator.h"
+#include "Grafici-GFX/src/data/DataSetSpline.h"
 
 int main()
 {
+
 
 	{
 		/* simple_plot */
@@ -82,14 +75,16 @@ int main()
 		/* Subplot */
 		DataSetFloat dataset;
 		DataSetSpline dataSpline;
+		DataSetHistogram dataHist;
 
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		float dataArray[5] = { 1, 0, 2, 2, 1 };
 
 		File_GFX gfx(640, 320, "imgs/subplot.bmp");
 
 		grafici.begin(gfx);
 		dataset.begin(dataArray, 1, 5);
 		dataSpline.begin(dataset, 100);
+		dataHist.begin(dataSpline, 30);
 
 		grafici.clear();
 
@@ -103,7 +98,7 @@ int main()
 		// divide screen in 2 colum and select first one
 		// add empty border
 		grafici.boundaries.reset().crop(1, 2, 1).addBorder(0.04, 0.04, 0.02, 0.04);
-		grafici.plot(barPlot, dataSpline);
+		grafici.plot(barPlot, dataHist);
 
 		gfx.flush();
 	}

@@ -4,7 +4,7 @@ CCSRC = $(wildcard *.cpp) \
 
 OBJ = $(CCSRC:.cpp=.o)
 
-CXXFLAGS=-g -std=c++11 -Wall -Wpedantic -Wunused -I.
+CXXFLAGS=-g -std=c++11 -Wall -Wpedantic -Wunused -Wextra -I.
 
 lib:
 	gcc -O -c ezdib.c
