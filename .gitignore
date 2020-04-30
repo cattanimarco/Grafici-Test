@@ -1,3 +1,5 @@
 *.o
-*.bmp
 test
+Grafici.*
+vscode.*
+.vscode/*

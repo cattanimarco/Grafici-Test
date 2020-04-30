@@ -18,5 +18,6 @@ run: lib test
 .PHONY: clean
 
 clean:
-	rm -f $(OBJ) ezdib.o test 
+	rm -f $(OBJ) ezdib.o test
+	rm -f imgs/*.bmp 
 
