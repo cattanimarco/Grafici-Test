@@ -1,13 +1,13 @@
 #include "File_GFX.h"
 
-#include "Grafici-GFX/src/Grafici.h"
-#include "Grafici-GFX/src/DataSource/Array.h"
-#include "Grafici-GFX/src/DataSource/Generative.h"
-#include "Grafici-GFX/src/DataSource/Histogram.h"
 #include "Grafici-GFX/src/DataSet/LinearInterpolator.h"
 #include "Grafici-GFX/src/DataSet/SplineInterpolator.h"
+#include "Grafici-GFX/src/DataSource/Array.h"
+#include "Grafici-GFX/src/DataSource/Histogram.h"
+#include "Grafici-GFX/src/DataSource/Parametric.h"
+#include "Grafici-GFX/src/Grafici.h"
 
-//#include "Grafici-GFX/src/plots/Line.h"
+//#include "Grafici-GFX/src/plots/line.h"
 
 // #include "Grafici-GFX/src/data/DataSource::Array.h"
 // #include "Grafici-GFX/src/data/DataSource::Histogram.h"
@@ -16,7 +16,7 @@
 // #include "Grafici-GFX/src/plots/axisPlot.h"
 // #include "Grafici-GFX/src/plots/barPlot.h"
 // #include "Grafici-GFX/src/plots/barcodePlot.h"
-// #include "Grafici-GFX/src/plots/Line.h"
+// #include "Grafici-GFX/src/plots/line.h"
 // #include "Grafici-GFX/src/plots/scatterPlot.h"
 
 int main()
@@ -33,9 +33,9 @@ int main()
 		DataSource::Linear x(num_elem);
 		DataSource::Array<float> y(array, num_elem);
 		DataSource::Constant c(num_elem, 1);
-		
+
 		grafici.clear();
-		grafici.plot(Line, x, y, c);
+		grafici.plot(line, x, y, c);
 		gfx.flush();
 	}
 
@@ -49,12 +49,12 @@ int main()
 
 		DataSource::Linear x(num_elem);
 		DataSource::Array<float> y(array, num_elem);
-		// Chose a big enough number for the samples. Too small and you risk sub-sampling issues 
+		// Chose a big enough number for the samples. Too small and you risk sub-sampling issues
 		// Even better chose samples = n + (n-1) * x
-		DataSet::LinearInterpolator dataLinear{x,y,y,y,85};
+		DataSet::LinearInterpolator dataLinear{ x, y, y, y, 85 };
 
 		grafici.clear();
-		grafici.plot(Line, dataLinear);
+		grafici.plot(line, dataLinear);
 		gfx.flush();
 	}
 
@@ -68,42 +68,99 @@ int main()
 
 		DataSource::Linear x(num_elem);
 		DataSource::Array<float> y(array, num_elem);
-		DataSet::SplineInterpolator dataSpline{x,y,y,y,100};
+		DataSet::SplineInterpolator dataSpline{ x, y, y, y, 100 };
 
 		grafici.clear();
-		grafici.plot(Line, dataSpline);
+		grafici.plot(line, dataSpline);
 		gfx.flush();
 	}
 
 	{
 		/* data histogram */
-
-		// TODO barplot and extract datasource from interpolated dataset
-		// Change from Line to Plotter::Line
-
 		constexpr size_t data_elem = 6;
 		constexpr size_t spline_elem = 100;
 		constexpr size_t hist_elem = 20;
 		float array[data_elem] = { 1, 0, 2, 1, 2, 2 };
 
 		File_GFX gfx(640, 320, "imgs/data_histogram.bmp");
-		grafici.begin(gfx, Colors::rainbow);
+		grafici.begin(gfx, Colors::csHeat);
 
 		/* Load raw data */
 		DataSource::Linear x(data_elem);
 		DataSource::Array<float> y(array, data_elem);
 
 		/* Artificially create more elements to make the histogram more interesting */
-		DataSet::SplineInterpolator dataSpline{x,y,y,y,spline_elem};
+		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_elem };
 
 		/* Generate the histogram */
-		DataSource::Histogram dataHistogram{dataSpline.y(),hist_elem};
-		DataSource::Linear xHistogram(hist_elem);
+		DataSource::Histogram dataHistogram{ dataSpline.y(), hist_elem };
+		DataSource::BarIndex histogramX(hist_elem);
+		DataSource::Constant dataOpt(hist_elem, 0.5);
 
 		grafici.clear();
-		grafici.plot(Line, xHistogram,dataHistogram,dataHistogram);
+		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt);
 		gfx.flush();
 	}
+
+	{
+		/* subplot 1*/
+		constexpr size_t data_elem = 6;
+		constexpr size_t spline_elem = 100;
+		constexpr size_t hist_elem = 20;
+		float array[data_elem] = { 1, 0, 2, 1, 2, 2 };
+
+		File_GFX gfx(640, 320, "imgs/subplot_1.bmp");
+		grafici.begin(gfx, Colors::csParula);
+		grafici.clear();
+
+		/* Load raw data */
+		DataSource::Linear x(data_elem);
+		DataSource::Array<float> y(array, data_elem);
+
+		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_elem };
+		Boundary leftBoundary;
+
+		leftBoundary.cropGridCartesian(1, 2, 0, 0);
+		grafici.plot(line, dataSpline, leftBoundary);
+
+		// /* Generate the histogram */
+		DataSource::Histogram dataHistogram{ dataSpline.y(), hist_elem };
+		DataSource::BarIndex histogramX(hist_elem);
+		DataSource::Constant dataOpt(hist_elem, 0.5);
+		Boundary rightBoundary;
+
+		rightBoundary.cropGridCartesian(1, 2, 0, 1);
+		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt, rightBoundary);
+		gfx.flush();
+	}
+
+	{
+		/* subplot 2*/
+		constexpr size_t data_elem = 6;
+		constexpr size_t spline_elem = 100;
+		constexpr size_t hist_elem = 20;
+		float array[data_elem] = { 1, 0, 2, 1, 2, 2 };
+
+		File_GFX gfx(640, 320, "imgs/subplot_2.bmp");
+		grafici.begin(gfx, Colors::temperature);
+		grafici.clear();
+
+		/* Load raw data */
+		DataSource::Linear x(data_elem);
+		DataSource::Array<float> y(array, data_elem);
+		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_elem };
+		DataSource::Histogram dataHistogram{ dataSpline.y(), hist_elem };
+		DataSource::BarIndex histogramX(hist_elem);
+		DataSource::Constant dataOpt(hist_elem, 0.1);
+
+		Boundary barBoundary;
+		barBoundary.shrinkCartesian({ 0.0, 0.85 }, { 0.0, 0.0 }).boundaryRotation() = BoundaryRotation::clockWise90;
+		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt, barBoundary);
+		grafici.plot(line, dataSpline);
+		gfx.flush();
+	}
+
+	/* TODO draw axis */
 
 	// {
 	// 	/* Subplot */
@@ -126,7 +183,7 @@ int main()
 	// 	// divide screen in 2 colum and select first one
 	// 	// add empty border
 	// 	grafici.boundary.fullScreen().subBoundary(1, 2, 0).addBorder(0.04, 0.04, 0.04, 0.02);
-	// 	grafici.plot(Line, dataSpline);
+	// 	grafici.plot(line, dataSpline);
 
 	// 	// set boundary to full screen
 	// 	// divide screen in 2 colum and select first one
@@ -153,7 +210,7 @@ int main()
 
 	// 	grafici.clear();
 	// 	grafici.boundary.fullScreen().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
-	// 	grafici.plot(Line, dataSpline);                                // keep the same boundary and plot multiple times
+	// 	grafici.plot(line, dataSpline);                                // keep the same boundary and plot multiple times
 	// 	grafici.plot(scatterPlot, dataSpline);
 
 	// 	gfx.flush();
@@ -212,7 +269,7 @@ int main()
 
 	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(Line, dataSpline);
+	// 	grafici.plot(line, dataSpline);
 
 	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 1).addBorder(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline);
@@ -285,7 +342,7 @@ int main()
 	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1);
 	// 	roundBoundary.addBorderRadial(0, 0.6, 0.25, 0);
 	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
-	// 	grafici.plot(Line, dataSpline, roundBoundary);
+	// 	grafici.plot(line, dataSpline, roundBoundary);
 
 	// 	gfx.flush();
 	// }
@@ -354,21 +411,21 @@ int main()
 	// 	grafici.boundary.subBoundary(1, 3, 0);
 	// 	grafici.boundary.addBorder(0.04, 0.04, 0.04, 0.02);
 	// 	grafici.plot(axisPlot, dataset);
-	// 	grafici.plot(Line, dataset);
+	// 	grafici.plot(line, dataset);
 	// 	grafici.plot(barPlot, dataset);
 
 	// 	grafici.boundary.fullScreen();
 	// 	grafici.boundary.subBoundary(1, 3, 1);
 	// 	grafici.boundary.addBorder(0.04, 0.04, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataLinearInterpolator);
-	// 	grafici.plot(Line, dataLinearInterpolator);
+	// 	grafici.plot(line, dataLinearInterpolator);
 	// 	grafici.plot(barPlot, dataLinearInterpolator);
 
 	// 	grafici.boundary.fullScreen();
 	// 	grafici.boundary.subBoundary(1, 3, 2);
 	// 	grafici.boundary.addBorder(0.04, 0.04, 0.02, 0.04);
 	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(Line, dataSpline);
+	// 	grafici.plot(line, dataSpline);
 	// 	grafici.plot(barPlot, dataSpline);
 
 	// 	//flush to file
@@ -431,7 +488,7 @@ int main()
 	// 	dataset.begin(dataArrayY, 1.0, 11);
 	// 	dataSpline.begin(dataset, 20);
 
-	// 	Plotter *plots[6] = { &barcodePlot, &barPlot, &Line, &scatterPlot, &Line, &Line };
+	// 	Plotter *plots[6] = { &barcodePlot, &barPlot, &line, &scatterPlot, &line, &line };
 
 	// 	barPlot.thickness = 0.9;
 
