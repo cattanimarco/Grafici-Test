@@ -1,10 +1,14 @@
 #include "File_GFX.h"
 
+
 #include "Grafici-GFX/src/DataSet/LinearInterpolator.h"
 #include "Grafici-GFX/src/DataSet/SplineInterpolator.h"
 #include "Grafici-GFX/src/DataSource/Array.h"
 #include "Grafici-GFX/src/DataSource/Histogram.h"
 #include "Grafici-GFX/src/DataSource/Parametric.h"
+#include "Grafici-GFX/src/DataSource/Constant.h"
+#include "Grafici-GFX/src/DataSource/Linear.h"
+#include "Grafici-GFX/src/DataSource/BarIndex.h"
 #include "Grafici-GFX/src/Grafici.h"
 
 //#include "Grafici-GFX/src/plots/line.h"
@@ -21,6 +25,8 @@
 
 int main()
 {
+
+	/* taxonomy from https://vcg.seas.harvard.edu/files/pfister/files/viztaxonomy2013.pdf */
 
 	{
 		/* simple plot */
@@ -76,145 +82,78 @@ int main()
 	}
 
 	{
-		/* data histogram */
-		constexpr size_t data_elem = 6;
-		constexpr size_t spline_elem = 100;
-		constexpr size_t hist_elem = 20;
-		float array[data_elem] = { 1, 0, 2, 1, 2, 2 };
+		/* Multiplot */
+		constexpr size_t source_data_size = 6;
+		constexpr size_t spline_size = 100;
+		constexpr size_t histogram_size = 20;
+		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
 
-		File_GFX gfx(640, 320, "imgs/data_histogram.bmp");
-		grafici.begin(gfx, Colors::csHeat);
-
-		/* Load raw data */
-		DataSource::Linear x(data_elem);
-		DataSource::Array<float> y(array, data_elem);
-
-		/* Artificially create more elements to make the histogram more interesting */
-		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_elem };
-
-		/* Generate the histogram */
-		DataSource::Histogram dataHistogram{ dataSpline.y(), hist_elem };
-		DataSource::BarIndex histogramX(hist_elem);
-		DataSource::Constant dataOpt(hist_elem, 0.5);
-
-		grafici.clear();
-		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt);
-		gfx.flush();
-	}
-
-	{
-		/* subplot 1*/
-		constexpr size_t data_elem = 6;
-		constexpr size_t spline_elem = 100;
-		constexpr size_t hist_elem = 20;
-		float array[data_elem] = { 1, 0, 2, 1, 2, 2 };
-
-		File_GFX gfx(640, 320, "imgs/subplot_1.bmp");
-		grafici.begin(gfx, Colors::csParula);
-		grafici.clear();
-
-		/* Load raw data */
-		DataSource::Linear x(data_elem);
-		DataSource::Array<float> y(array, data_elem);
-
-		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_elem };
-		Boundary leftBoundary;
-
-		leftBoundary.cropGridCartesian(1, 2, 0, 0);
-		grafici.plot(line, dataSpline, leftBoundary);
-
-		// /* Generate the histogram */
-		DataSource::Histogram dataHistogram{ dataSpline.y(), hist_elem };
-		DataSource::BarIndex histogramX(hist_elem);
-		DataSource::Constant dataOpt(hist_elem, 0.5);
-		Boundary rightBoundary;
-
-		rightBoundary.cropGridCartesian(1, 2, 0, 1);
-		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt, rightBoundary);
-		gfx.flush();
-	}
-
-	{
-		/* subplot 2*/
-		constexpr size_t data_elem = 6;
-		constexpr size_t spline_elem = 100;
-		constexpr size_t hist_elem = 20;
-		float array[data_elem] = { 1, 0, 2, 1, 2, 2 };
-
-		File_GFX gfx(640, 320, "imgs/subplot_2.bmp");
+		File_GFX gfx(640, 320, "imgs/multiplot.bmp");
 		grafici.begin(gfx, Colors::temperature);
 		grafici.clear();
 
 		/* Load raw data */
-		DataSource::Linear x(data_elem);
-		DataSource::Array<float> y(array, data_elem);
-		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_elem };
-		DataSource::Histogram dataHistogram{ dataSpline.y(), hist_elem };
-		DataSource::BarIndex histogramX(hist_elem);
-		DataSource::Constant dataOpt(hist_elem, 0.1);
+		DataSource::Linear x(source_data_size);
+		DataSource::Array<float> y(array, source_data_size);
+		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_size };
+		DataSource::Histogram dataHistogram{ dataSpline.y(), histogram_size };
+		DataSource::BarIndex histogramX(histogram_size);
+		DataSource::Constant dataOpt(histogram_size, 0.3);
 
 		Boundary barBoundary;
-		barBoundary.shrinkCartesian({ 0.0, 0.85 }, { 0.0, 0.0 }).boundaryRotation() = BoundaryRotation::clockWise90;
+		Boundary lineBoundary;
+		barBoundary.addBorderRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 }).boundaryRotation() = BoundaryRotation::clockWise90;
+		lineBoundary.addBorderRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
 		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt, barBoundary);
-		grafici.plot(line, dataSpline);
+		grafici.plot(line, dataSpline, lineBoundary);
 		gfx.flush();
 	}
 
+	{
+		/* Subplot */
+		constexpr size_t source_data_size = 6;
+		constexpr size_t spline_size = 100;
+		constexpr size_t histogram_size = 10;
+		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
+
+		File_GFX gfx(640, 320, "imgs/subplot.bmp");
+		grafici.begin(gfx, Colors::csParula);
+		grafici.clear();
+
+		/* Load raw data */
+		DataSource::Linear x(source_data_size);
+		DataSource::Array<float> y(array, source_data_size);
+
+		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_size };
+		Boundary leftBoundary;
+
+		leftBoundary.cropGridCartesian(1, 2, 0, 0).addBorderAbsoluteCartesian({ 0.04, 0.02 }, { 0.04, 0.04 });
+		grafici.plot(line, dataSpline, leftBoundary);
+
+		/* Bar chart + histogram */
+		DataSource::Histogram dataHistogram{ dataSpline.y(), histogram_size };
+		/* TODO extend BarIndex to allow for group bar chart */
+		DataSource::BarIndex histogramX(histogram_size);
+		DataSource::Constant dataOpt1(histogram_size, 0.5);
+
+		Boundary rightTopBoundary;
+		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).addBorderAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
+		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt1, rightTopBoundary);
+
+		/* Stripe graph */
+		Boundary rightBottomBoundary;
+		DataSource::Constant barY(spline_size,1.0);
+		DataSource::Constant dataOpt2(spline_size, 0.0);
+		DataSource::Select xxx = dataSpline.y();
+		rightBottomBoundary.cropGridCartesian(2, 2, 1, 1).addBorderAbsoluteCartesian({ 0.02, 0.04 }, { 0.02, 0.04 });
+		grafici.plot(bar, xxx, barY, xxx, dataOpt2, rightBottomBoundary);
+
+		gfx.flush();
+	}
+
+
+
 	/* TODO draw axis */
-
-	// {
-	// 	/* Subplot */
-	// 	DataSource::Float dataset;
-	// 	DataSource::Spline dataSpline;
-	// 	DataSource::Histogram dataHist;
-
-	// 	float dataArray[5] = { 1, 0, 2, 2, 1 };
-
-	// 	File_GFX gfx(640, 320, "imgs/subplot.bmp");
-
-	// 	grafici.begin(gfx);
-	// 	dataset.begin(dataArray, 1, 5);
-	// 	dataSpline.begin(dataset, 100);
-	// 	dataHist.begin(dataSpline, 30);
-
-	// 	grafici.clear();
-
-	// 	// set boundary to full screen
-	// 	// divide screen in 2 colum and select first one
-	// 	// add empty border
-	// 	grafici.boundary.fullScreen().subBoundary(1, 2, 0).addBorder(0.04, 0.04, 0.04, 0.02);
-	// 	grafici.plot(line, dataSpline);
-
-	// 	// set boundary to full screen
-	// 	// divide screen in 2 colum and select first one
-	// 	// add empty border
-	// 	grafici.boundary.fullScreen().subBoundary(1, 2, 1).addBorder(0.04, 0.04, 0.02, 0.04);
-	// 	grafici.plot(barPlot, dataHist);
-
-	// 	gfx.flush();
-	// }
-
-	// {
-	// 	/* Multiplot */
-	// 	DataSource::Float dataset;
-	// 	DataSource::Spline dataSpline;
-
-	// 	float dataArray[5] = { 1, 0, 2, 1, 2 };
-
-	// 	File_GFX gfx(640, 320, "imgs/multiplot.bmp");
-
-	// 	grafici.begin(gfx);
-	// 	dataset.begin(dataArray, 1, 5);
-	// 	dataSpline.begin(dataset, 100);
-	// 	scatterPlot.markerSize = 0.0002; // this is defined a proportion of the area of the plot
-
-	// 	grafici.clear();
-	// 	grafici.boundary.fullScreen().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
-	// 	grafici.plot(line, dataSpline);                                // keep the same boundary and plot multiple times
-	// 	grafici.plot(scatterPlot, dataSpline);
-
-	// 	gfx.flush();
-	// }
 
 	// {
 	// 	/* Transformations */
