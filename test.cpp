@@ -1,14 +1,13 @@
 #include "File_GFX.h"
 
-
 #include "Grafici-GFX/src/DataSet/LinearInterpolator.h"
 #include "Grafici-GFX/src/DataSet/SplineInterpolator.h"
 #include "Grafici-GFX/src/DataSource/Array.h"
-#include "Grafici-GFX/src/DataSource/Histogram.h"
-#include "Grafici-GFX/src/DataSource/Parametric.h"
-#include "Grafici-GFX/src/DataSource/Constant.h"
-#include "Grafici-GFX/src/DataSource/Linear.h"
 #include "Grafici-GFX/src/DataSource/BarIndex.h"
+#include "Grafici-GFX/src/DataSource/Constant.h"
+#include "Grafici-GFX/src/DataSource/Histogram.h"
+#include "Grafici-GFX/src/DataSource/Linear.h"
+#include "Grafici-GFX/src/DataSource/Parametric.h"
 #include "Grafici-GFX/src/Grafici.h"
 
 //#include "Grafici-GFX/src/plots/line.h"
@@ -102,8 +101,8 @@ int main()
 
 		Boundary barBoundary;
 		Boundary lineBoundary;
-		barBoundary.addBorderRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 }).boundaryRotation() = BoundaryRotation::clockWise90;
-		lineBoundary.addBorderRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
+		barBoundary.cropRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 }).boundaryRotation() = BoundaryRotation::clockWise90;
+		lineBoundary.cropRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
 		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt, barBoundary);
 		grafici.plot(line, dataSpline, lineBoundary);
 		gfx.flush();
@@ -127,7 +126,7 @@ int main()
 		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_size };
 		Boundary leftBoundary;
 
-		leftBoundary.cropGridCartesian(1, 2, 0, 0).addBorderAbsoluteCartesian({ 0.04, 0.02 }, { 0.04, 0.04 });
+		leftBoundary.cropGridCartesian(1, 2, 0, 0).cropAbsoluteCartesian({ 0.04, 0.02 }, { 0.04, 0.04 });
 		grafici.plot(line, dataSpline, leftBoundary);
 
 		/* Bar chart + histogram */
@@ -137,56 +136,39 @@ int main()
 		DataSource::Constant dataOpt1(histogram_size, 0.5);
 
 		Boundary rightTopBoundary;
-		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).addBorderAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
+		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
 		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt1, rightTopBoundary);
 
 		/* Stripe graph */
 		Boundary rightBottomBoundary;
-		DataSource::Constant barY(spline_size,1.0);
+		DataSource::Constant barY(spline_size, 1.0);
 		DataSource::Constant dataOpt2(spline_size, 0.0);
 		DataSource::Select xxx = dataSpline.y();
-		rightBottomBoundary.cropGridCartesian(2, 2, 1, 1).addBorderAbsoluteCartesian({ 0.02, 0.04 }, { 0.02, 0.04 });
+		rightBottomBoundary.cropGridCartesian(2, 2, 1, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.02, 0.04 });
 		grafici.plot(bar, xxx, barY, xxx, dataOpt2, rightBottomBoundary);
 
 		gfx.flush();
 	}
 
+	{
+		/* styles plot */
+		constexpr size_t num_elem = 5;
+		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
+		File_GFX gfx(640, 320, "imgs/styles.bmp");
+		grafici.begin(gfx, Colors::blackAndWhite);
+		grafici.clear();
 
-	/* TODO draw axis */
+		DataSource::Linear x(num_elem);
+		DataSource::Array<float> y(array, num_elem);
+		DataSource::Constant opt(num_elem, 0.01);
+		DataSource::Constant c(num_elem, 1);
+		Boundary boundary;
 
-	// {
-	// 	/* Transformations */
-	// 	DataSource::Float dataset;
-	// 	DataSource::Spline dataSpline;
-
-	// 	float dataArray[5] = { 1, 0, 2, 1, 2 };
-
-	// 	File_GFX gfx(640, 320, "imgs/transformations.bmp");
-
-	// 	grafici.begin(gfx);
-	// 	dataset.begin(dataArray, 1, 5);
-	// 	dataSpline.begin(dataset, 100);
-
-	// 	grafici.clear();
-
-	// 	grafici.boundary.fullScreen().subBoundary(2, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.plot(barPlot, dataSpline);
-
-	// 	grafici.boundary.fullScreen().subBoundary(2, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.boundary.horizzontalFlip();
-	// 	grafici.plot(barPlot, dataSpline);
-
-	// 	grafici.boundary.fullScreen().subBoundary(2, 2, 2).addBorder(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.boundary.verticalFlip();
-	// 	grafici.plot(barPlot, dataSpline);
-
-	// 	grafici.boundary.fullScreen().subBoundary(2, 2, 3).addBorder(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.boundary.horizzontalFlip().verticalFlip();
-	// 	grafici.plot(barPlot, dataSpline);
-
-	// 	gfx.flush();
-	// }
+		boundary.cropAbsoluteCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
+		grafici.plot(scatter, x, y, c, opt, boundary);
+		gfx.flush();
+	}
 
 	// {
 	// 	/* Styles */
@@ -206,15 +188,15 @@ int main()
 	// 	axisPlot.numAxisY = 3;
 	// 	scatterPlot.markerSize = 0.0001;
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 0).crop(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline);
 	// 	grafici.plot(line, dataSpline);
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 1).crop(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline);
 	// 	grafici.plot(barPlot, dataSpline);
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 2).addBorder(0.02, 0.02, 0.02, 0.02);
+	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 2).crop(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline);
 	// 	grafici.plot(scatterPlot, dataSpline);
 
@@ -239,11 +221,11 @@ int main()
 
 	// 	grafici.clear();
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+	// 	grafici.boundary.fullScreen().subBoundary(1, 2, 0).crop(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline);
 	// 	grafici.plot(barPlot, dataSpline);
 
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
+	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1).crop(0.02, 0.02, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
 	// 	grafici.plot(barPlot, dataSpline, roundBoundary);
 
@@ -268,18 +250,18 @@ int main()
 
 	// 	grafici.clear();
 
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
+	// 	roundBoundary.fullScreen().subBoundary(1, 2, 0).crop(0.02, 0.02, 0.02, 0.02);
 	// 	roundBoundary.subBoundaryRadial(1, 2, 0);
 	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
 	// 	grafici.plot(barPlot, dataSpline, roundBoundary);
 
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-	// 	roundBoundary.addBorderRadial(0.5, 0.1, 0.25, 0);
+	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1).crop(0.02, 0.02, 0.02, 0.02);
+	// 	roundBoundary.cropRadial(0.5, 0.1, 0.25, 0);
 	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
 	// 	grafici.plot(barPlot, dataSpline, roundBoundary);
 
 	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1);
-	// 	roundBoundary.addBorderRadial(0, 0.6, 0.25, 0);
+	// 	roundBoundary.cropRadial(0, 0.6, 0.25, 0);
 	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
 	// 	grafici.plot(line, dataSpline, roundBoundary);
 
@@ -316,8 +298,8 @@ int main()
 	// 	for (int i = 0; i < sizeof(colorPlots) / sizeof(ColorSet); i++)
 	// 	{
 	// 		grafici.style.setPalette(colorPlots[i]);
-	// 		roundBoundary.fullScreen().subBoundary(2, 4, i).addBorder(0.02, 0.02, 0.02, 0.02);
-	// 		roundBoundary.addBorderRadial(0, 0.25, 0, 0);
+	// 		roundBoundary.fullScreen().subBoundary(2, 4, i).crop(0.02, 0.02, 0.02, 0.02);
+	// 		roundBoundary.cropRadial(0, 0.25, 0, 0);
 	// 		grafici.plot(barPlot, dataLinearInterpolator, roundBoundary);
 	// 	}
 
@@ -348,21 +330,21 @@ int main()
 	// 	barPlot.thickness = 0.0;
 
 	// 	grafici.boundary.subBoundary(1, 3, 0);
-	// 	grafici.boundary.addBorder(0.04, 0.04, 0.04, 0.02);
+	// 	grafici.boundary.crop(0.04, 0.04, 0.04, 0.02);
 	// 	grafici.plot(axisPlot, dataset);
 	// 	grafici.plot(line, dataset);
 	// 	grafici.plot(barPlot, dataset);
 
 	// 	grafici.boundary.fullScreen();
 	// 	grafici.boundary.subBoundary(1, 3, 1);
-	// 	grafici.boundary.addBorder(0.04, 0.04, 0.02, 0.02);
+	// 	grafici.boundary.crop(0.04, 0.04, 0.02, 0.02);
 	// 	grafici.plot(axisPlot, dataLinearInterpolator);
 	// 	grafici.plot(line, dataLinearInterpolator);
 	// 	grafici.plot(barPlot, dataLinearInterpolator);
 
 	// 	grafici.boundary.fullScreen();
 	// 	grafici.boundary.subBoundary(1, 3, 2);
-	// 	grafici.boundary.addBorder(0.04, 0.04, 0.02, 0.04);
+	// 	grafici.boundary.crop(0.04, 0.04, 0.02, 0.04);
 	// 	grafici.plot(axisPlot, dataSpline);
 	// 	grafici.plot(line, dataSpline);
 	// 	grafici.plot(barPlot, dataSpline);
@@ -400,7 +382,7 @@ int main()
 	// 		boundary.subBoundary(2, 3, i);
 	// 		grafici.clear(boundary);
 
-	// 		boundary.addBorder(0.02, 0.02, 0.02, 0.02);
+	// 		boundary.crop(0.02, 0.02, 0.02, 0.02);
 	// 		grafici.plot(barPlot, dataSpline, boundary);
 	// 	}
 
@@ -435,7 +417,7 @@ int main()
 	// 	{
 	// 		Boundary boundary;
 	// 		boundary.subBoundary(2, 3, i);
-	// 		boundary.addBorder(0.02, 0.02, 0.02, 0.02);
+	// 		boundary.crop(0.02, 0.02, 0.02, 0.02);
 
 	// 		grafici.plot(*plots[i], dataSpline, boundary);
 	// 	}
