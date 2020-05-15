@@ -1,13 +1,6 @@
 #include "File_GFX.h"
 
-#include "Grafici-GFX/src/DataSet/LinearInterpolator.h"
-#include "Grafici-GFX/src/DataSet/SplineInterpolator.h"
-#include "Grafici-GFX/src/DataSource/Array.h"
-#include "Grafici-GFX/src/DataSource/BarIndex.h"
-#include "Grafici-GFX/src/DataSource/Constant.h"
-#include "Grafici-GFX/src/DataSource/Histogram.h"
-#include "Grafici-GFX/src/DataSource/Linear.h"
-#include "Grafici-GFX/src/DataSource/Parametric.h"
+
 #include "Grafici-GFX/src/Grafici.h"
 
 //#include "Grafici-GFX/src/plots/line.h"
@@ -162,11 +155,16 @@ int main()
 		DataSource::Linear x(num_elem);
 		DataSource::Array<float> y(array, num_elem);
 		DataSource::Constant opt(num_elem, 0.01);
+		DataSource::Constant optBar(num_elem, 0);
 		DataSource::Constant c(num_elem, 1);
 		Boundary boundary;
 
+		/* TODO scatter size to behave like barplot thickness? */
+
 		boundary.cropAbsoluteCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
 		grafici.plot(scatter, x, y, c, opt, boundary);
+		grafici.plot(line, x, y, c, boundary);
+		grafici.plot(bar, x, y, c, optBar, boundary);
 		gfx.flush();
 	}
 
