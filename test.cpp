@@ -1,19 +1,6 @@
 #include "File_GFX.h"
-
-
 #include "Grafici-GFX/src/Grafici.h"
 
-//#include "Grafici-GFX/src/plots/line.h"
-
-// #include "Grafici-GFX/src/data/DataSource::Array.h"
-// #include "Grafici-GFX/src/data/DataSource::Histogram.h"
-// #include "Grafici-GFX/src/data/DataSource::LinearInterpolator.h"
-// #include "Grafici-GFX/src/data/DataSource::Spline.h"
-// #include "Grafici-GFX/src/plots/axisPlot.h"
-// #include "Grafici-GFX/src/plots/barPlot.h"
-// #include "Grafici-GFX/src/plots/barcodePlot.h"
-// #include "Grafici-GFX/src/plots/line.h"
-// #include "Grafici-GFX/src/plots/scatterPlot.h"
 
 int main()
 {
@@ -126,19 +113,17 @@ int main()
 		DataSource::Histogram dataHistogram{ dataSpline.y(), histogram_size };
 		/* TODO extend BarIndex to allow for group bar chart */
 		DataSource::BarIndex histogramX(histogram_size);
-		DataSource::Constant dataOpt1(histogram_size, 0.5);
 
 		Boundary rightTopBoundary;
 		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
-		grafici.plot(bar, histogramX, dataHistogram, histogramX, dataOpt1, rightTopBoundary);
+		grafici.plot(bar, histogramX, dataHistogram, histogramX, DataSource::Constant(histogram_size, 0.5), rightTopBoundary);
 
 		/* Stripe graph */
 		Boundary rightBottomBoundary;
 		DataSource::Constant barY(spline_size, 1.0);
-		DataSource::Constant dataOpt2(spline_size, 0.0);
-		DataSource::Select xxx = dataSpline.y();
+
 		rightBottomBoundary.cropGridCartesian(2, 2, 1, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.02, 0.04 });
-		grafici.plot(bar, xxx, barY, xxx, dataOpt2, rightBottomBoundary);
+		grafici.plot(bar, dataSpline.y(), barY, dataSpline.y(), DataSource::Constant(spline_size, 0.0), rightBottomBoundary);
 
 		gfx.flush();
 	}
