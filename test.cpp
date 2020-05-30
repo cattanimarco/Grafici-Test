@@ -15,9 +15,9 @@ int main()
 		File_GFX gfx(640, 320, "imgs/simple_plot.bmp");
 		grafici.begin(gfx, Colors::blackAndWhite);
 
-		DataSource::Linear x(num_elem);
-		DataSource::Array<float> y(array, num_elem);
-		DataSource::Constant c(num_elem, 1);
+		Linear x(num_elem);
+		ArrayFloat y(array, num_elem);
+		Constant c(num_elem, 1);
 
 		grafici.clear();
 		grafici.plot(line, x, y, c);
@@ -32,11 +32,11 @@ int main()
 		File_GFX gfx(640, 320, "imgs/linear_interpolation.bmp");
 		grafici.begin(gfx, Colors::rainbow);
 
-		DataSource::Linear x(num_elem);
-		DataSource::Array<float> y(array, num_elem);
+		Linear x(num_elem);
+		ArrayFloat y(array, num_elem);
 		// Chose a big enough number for the samples. Too small and you risk sub-sampling issues
 		// Even better chose samples = n + (n-1) * x
-		DataSet::LinearInterpolator dataLinear{ x, y, y, y, 85 };
+		LinearInterpolator dataLinear{ x, y, y, y, 85 };
 
 		grafici.clear();
 		grafici.plot(line, dataLinear);
@@ -51,9 +51,9 @@ int main()
 		File_GFX gfx(640, 320, "imgs/spline_interpolation.bmp");
 		grafici.begin(gfx, Colors::rainbow);
 
-		DataSource::Linear x(num_elem);
-		DataSource::Array<float> y(array, num_elem);
-		DataSet::SplineInterpolator dataSpline{ x, y, y, y, 100 };
+		Linear x(num_elem);
+		ArrayFloat y(array, num_elem);
+		SplineInterpolator dataSpline{ x, y, y, y, 100 };
 
 		grafici.clear();
 		grafici.plot(line, dataSpline);
@@ -72,12 +72,12 @@ int main()
 		grafici.clear();
 
 		/* Load raw data */
-		DataSource::Linear x(source_data_size);
-		DataSource::Array<float> y(array, source_data_size);
-		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_size };
-		DataSource::Histogram dataHistogram{ dataSpline.y(), histogram_size };
-		DataSource::BarIndex histogramX(histogram_size);
-		DataSource::Constant dataOpt(histogram_size, 0.3);
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		SplineInterpolator dataSpline{ x, y, y, y, spline_size };
+		Histogram dataHistogram{ dataSpline.y(), histogram_size };
+		BarIndex histogramX(histogram_size);
+		Constant dataOpt(histogram_size, 0.3);
 
 		Boundary barBoundary;
 		Boundary lineBoundary;
@@ -100,30 +100,30 @@ int main()
 		grafici.clear();
 
 		/* Load raw data */
-		DataSource::Linear x(source_data_size);
-		DataSource::Array<float> y(array, source_data_size);
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
 
-		DataSet::SplineInterpolator dataSpline{ x, y, y, y, spline_size };
+		SplineInterpolator dataSpline{ x, y, y, y, spline_size };
 		Boundary leftBoundary;
 
 		leftBoundary.cropGridCartesian(1, 2, 0, 0).cropAbsoluteCartesian({ 0.04, 0.02 }, { 0.04, 0.04 });
 		grafici.plot(line, dataSpline, leftBoundary);
 
 		/* Bar chart + histogram */
-		DataSource::Histogram dataHistogram{ dataSpline.y(), histogram_size };
+		Histogram dataHistogram{ dataSpline.y(), histogram_size };
 		/* TODO extend BarIndex to allow for group bar chart */
-		DataSource::BarIndex histogramX(histogram_size);
+		BarIndex histogramX(histogram_size);
 
 		Boundary rightTopBoundary;
 		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
-		grafici.plot(bar, histogramX, dataHistogram, histogramX, DataSource::Constant(histogram_size, 0.5), rightTopBoundary);
+		grafici.plot(bar, histogramX, dataHistogram, histogramX, Constant(histogram_size, 0.5), rightTopBoundary);
 
 		/* Stripe graph */
 		Boundary rightBottomBoundary;
-		DataSource::Constant barY(spline_size, 1.0);
+		Constant barY(spline_size, 1.0);
 
 		rightBottomBoundary.cropGridCartesian(2, 2, 1, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.02, 0.04 });
-		grafici.plot(bar, dataSpline.y(), barY, dataSpline.y(), DataSource::Constant(spline_size, 0.0), rightBottomBoundary);
+		grafici.plot(bar, dataSpline.y(), barY, dataSpline.y(), Constant(spline_size, 0.0), rightBottomBoundary);
 
 		gfx.flush();
 	}
@@ -137,11 +137,11 @@ int main()
 		grafici.begin(gfx, Colors::blackAndWhite);
 		grafici.clear();
 
-		DataSource::Linear x(num_elem);
-		DataSource::Array<float> y(array, num_elem);
-		DataSource::Constant opt(num_elem, 0.01);
-		DataSource::Constant optBar(num_elem, 0);
-		DataSource::Constant c(num_elem, 1);
+		Linear x(num_elem);
+		ArrayFloat y(array, num_elem);
+		Constant opt(num_elem, 0.01);
+		Constant optBar(num_elem, 0);
+		Constant c(num_elem, 1);
 		Boundary boundary;
 
 		/* TODO scatter size to behave like barplot thickness? */
@@ -293,7 +293,7 @@ int main()
 	// 	DataSource::Float dataset;
 	// 	DataSource::LinearInterpolator dataLinearInterpolator;
 	// 	DataSource::Spline dataSpline;
-	// 	DataSource::Histogram dataHist;
+	// 	Histogram dataHist;
 	// 	/* == INTERPOLATION == */
 	// 	//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
 	// 	float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
@@ -340,7 +340,7 @@ int main()
 	// 	DataSource::Float dataset;
 	// 	DataSource::LinearInterpolator dataLinearInterpolator;
 	// 	DataSource::Spline dataSpline;
-	// 	DataSource::Histogram dataHist;
+	// 	Histogram dataHist;
 	// 	/* == COLOR SCHEMES == */
 	// 	float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
@@ -377,7 +377,7 @@ int main()
 	// 	DataSource::Float dataset;
 	// 	DataSource::LinearInterpolator dataLinearInterpolator;
 	// 	DataSource::Spline dataSpline;
-	// 	DataSource::Histogram dataHist;
+	// 	Histogram dataHist;
 	// 	/* == PLOT STYLES == */
 	// 	float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
 
