@@ -1,7 +1,6 @@
 #include "File_GFX.h"
 #include "Grafici-GFX/src/Grafici.h"
 
-
 int main()
 {
 
@@ -153,67 +152,35 @@ int main()
 		gfx.flush();
 	}
 
-	// {
-	// 	/* Styles */
-	// 	DataSource::Float dataset;
-	// 	DataSource::Spline dataSpline;
+	{
+		/* Polar 1 */
 
-	// 	float dataArray[5] = { 1, 0, 2, 1, 2 };
+		constexpr size_t source_data_size = 9;
+		constexpr size_t spline_size = 97;
+		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
-	// 	File_GFX gfx(640, 320, "imgs/styles.bmp");
+		File_GFX gfx(640, 320, "imgs/polar_1.bmp");
+		grafici.begin(gfx, Colors::csParula);
+		grafici.clear();
 
-	// 	grafici.begin(gfx);
-	// 	dataset.begin(dataArray, 1, 5);
-	// 	dataSpline.begin(dataset, 30);
+		/* Load raw data */
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		SplineInterpolator dataSpline{ x, y, y, y, spline_size };
 
-	// 	grafici.clear();
-	// 	axisPlot.numAxisX = 9;
-	// 	axisPlot.numAxisY = 3;
-	// 	scatterPlot.markerSize = 0.0001;
+		// axisPlot.numAxisX = 10;
+		// axisPlot.numAxisY = 4;
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 0).crop(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(line, dataSpline);
+		Boundary leftBoundary;
+		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 }).cropGridCartesian(1, 2, 0, 0);
+		grafici.plot(line, dataSpline, leftBoundary);
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 1).crop(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(barPlot, dataSpline);
+		PolarBoundary rightBoundary;
+		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 }).cropGridCartesian(1, 2, 0, 1);
+		grafici.plot(line, dataSpline, rightBoundary);
 
-	// 	grafici.boundary.fullScreen().subBoundary(1, 3, 2).crop(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(scatterPlot, dataSpline);
-
-	// 	gfx.flush();
-	// }
-
-	// {
-	// 	/* Round 1 */
-	// 	DataSource::Float dataset;
-	// 	DataSource::Spline dataSpline;
-	// 	RoundBoundary roundBoundary;
-
-	// 	float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
-
-	// 	File_GFX gfx(640, 320, "imgs/round_1.bmp");
-
-	// 	grafici.begin(gfx);
-	// 	dataset.begin(dataArray, 1, 9);
-	// 	dataSpline.begin(dataset, 100);
-	// 	axisPlot.numAxisX = 10;
-	// 	axisPlot.numAxisY = 4;
-
-	// 	grafici.clear();
-
-	// 	grafici.boundary.fullScreen().subBoundary(1, 2, 0).crop(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(barPlot, dataSpline);
-
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1).crop(0.02, 0.02, 0.02, 0.02);
-	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
-	// 	grafici.plot(barPlot, dataSpline, roundBoundary);
-
-	// 	gfx.flush();
-	// }
+		gfx.flush();
+	}
 
 	// {
 	// 	/* Round 2 */
