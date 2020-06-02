@@ -153,13 +153,13 @@ int main()
 	}
 
 	{
-		/* Polar 1 */
+		/* Boundaries */
 
 		constexpr size_t source_data_size = 9;
 		constexpr size_t spline_size = 97;
 		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
-		File_GFX gfx(640, 320, "imgs/polar_1.bmp");
+		File_GFX gfx(640, 320, "imgs/boundaries.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
