@@ -11,7 +11,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(640, 320, "imgs/simple_plot.bmp");
+		File_GFX gfx(320, 240, "imgs/simple_plot.bmp");
 		grafici.begin(gfx, Colors::blackAndWhite);
 
 		Linear x(num_elem);
@@ -28,7 +28,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(640, 320, "imgs/linear_interpolation.bmp");
+		File_GFX gfx(320, 240, "imgs/linear_interpolation.bmp");
 		grafici.begin(gfx, Colors::rainbow);
 
 		Linear x(num_elem);
@@ -47,7 +47,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(640, 320, "imgs/spline_interpolation.bmp");
+		File_GFX gfx(320, 240, "imgs/spline_interpolation.bmp");
 		grafici.begin(gfx, Colors::rainbow);
 
 		Linear x(num_elem);
@@ -66,7 +66,7 @@ int main()
 		constexpr size_t histogram_size = 20;
 		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
 
-		File_GFX gfx(640, 320, "imgs/multiplot.bmp");
+		File_GFX gfx(320, 240, "imgs/multiplot.bmp");
 		grafici.begin(gfx, Colors::temperature);
 		grafici.clear();
 
@@ -94,7 +94,7 @@ int main()
 		constexpr size_t histogram_size = 10;
 		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
 
-		File_GFX gfx(640, 320, "imgs/subplot.bmp");
+		File_GFX gfx(320, 240, "imgs/subplot.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
@@ -132,7 +132,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(640, 320, "imgs/styles.bmp");
+		File_GFX gfx(320, 240, "imgs/styles.bmp");
 		grafici.begin(gfx, Colors::blackAndWhite);
 		grafici.clear();
 
@@ -159,7 +159,7 @@ int main()
 		constexpr size_t spline_size = 97;
 		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
-		File_GFX gfx(640, 320, "imgs/boundary_projections.bmp");
+		File_GFX gfx(320, 240, "imgs/boundary_projections.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
@@ -189,7 +189,7 @@ int main()
 		constexpr size_t spline_size = 97;
 		float array[source_data_size] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-		File_GFX gfx(640, 320, "imgs/polar_boundary.bmp");
+		File_GFX gfx(320, 240, "imgs/polar_boundary.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
@@ -234,7 +234,7 @@ int main()
 
 	// 	float dataArray[2] = { 2, 2 };
 
-	// 	File_GFX gfx(640, 320, "imgs/colors.bmp");
+	// 	File_GFX gfx(320, 240, "imgs/colors.bmp");
 
 	// 	grafici.begin(gfx);
 	// 	dataset.begin(dataArray, 1, 2);
