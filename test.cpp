@@ -153,13 +153,13 @@ int main()
 	}
 
 	{
-		/* Boundaries */
+		/* boundary_projections */
 
 		constexpr size_t source_data_size = 9;
 		constexpr size_t spline_size = 97;
 		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
-		File_GFX gfx(640, 320, "imgs/boundaries.bmp");
+		File_GFX gfx(640, 320, "imgs/boundary_projections.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
@@ -208,7 +208,7 @@ int main()
 		PolarBoundary rightBottomBoundary;
 		rightBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		rightBottomBoundary.cropGridCartesian(1, 2, 0, 1);
-		rightBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.7 });
+		rightBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.5 });
 		grafici.plot(bar, dataSpline, rightBottomBoundary);
 
 		// PolarBoundary middleBottomBoundary;
@@ -220,7 +220,7 @@ int main()
 		PolarBoundary rightTopBoundary;
 		rightTopBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		rightTopBoundary.cropGridCartesian(1, 2, 0, 1);
-		rightTopBoundary.cropRelativePolar({ 0, 0.25 }, { 0.35, 0.0 });
+		rightTopBoundary.cropRelativePolar({ 0, 0.25 }, { 0.5, 0.0 });
 		grafici.plot(line, dataSpline, rightTopBoundary);
 
 		gfx.flush();
