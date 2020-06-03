@@ -182,41 +182,49 @@ int main()
 		gfx.flush();
 	}
 
-	// {
-	// 	/* Round 2 */
-	// 	DataSource::Float dataset;
-	// 	DataSource::Spline dataSpline;
-	// 	RoundBoundary roundBoundary;
+	{
+		/* Polar Boundary */
 
-	// 	float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
+		constexpr size_t source_data_size = 9;
+		constexpr size_t spline_size = 97;
+		float array[source_data_size] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-	// 	File_GFX gfx(640, 320, "imgs/round_2.bmp");
+		File_GFX gfx(640, 320, "imgs/polar_boundary.bmp");
+		grafici.begin(gfx, Colors::csParula);
+		grafici.clear();
 
-	// 	grafici.begin(gfx);
-	// 	dataset.begin(dataArray, 1, 9);
-	// 	dataSpline.begin(dataset, 100);
-	// 	axisPlot.numAxisX = 10;
-	// 	axisPlot.numAxisY = 4;
+		/* Load raw data */
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		Constant opt(source_data_size, 0.0);
+		SplineInterpolator dataSpline{ x, y, y, opt, spline_size };
 
-	// 	grafici.clear();
+		PolarBoundary leftBoundary;
+		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		leftBoundary.cropGridCartesian(1, 2, 0, 0);
+		leftBoundary.cropGridPolar(1, 2, 0, 0);
+		grafici.plot(bar, dataSpline, leftBoundary);
 
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 0).crop(0.02, 0.02, 0.02, 0.02);
-	// 	roundBoundary.subBoundaryRadial(1, 2, 0);
-	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
-	// 	grafici.plot(barPlot, dataSpline, roundBoundary);
+		PolarBoundary rightBottomBoundary;
+		rightBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightBottomBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.7 });
+		grafici.plot(bar, dataSpline, rightBottomBoundary);
 
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1).crop(0.02, 0.02, 0.02, 0.02);
-	// 	roundBoundary.cropRadial(0.5, 0.1, 0.25, 0);
-	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
-	// 	grafici.plot(barPlot, dataSpline, roundBoundary);
+		// PolarBoundary middleBottomBoundary;
+		// middleBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		// middleBottomBoundary.cropGridCartesian(1, 2, 0, 1);
+		// middleBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0.35, 0.35 });
+		// grafici.plot(scatter, dataSpline, middleBottomBoundary);
 
-	// 	roundBoundary.fullScreen().subBoundary(1, 2, 1);
-	// 	roundBoundary.cropRadial(0, 0.6, 0.25, 0);
-	// 	grafici.plot(axisPlot, dataSpline, roundBoundary);
-	// 	grafici.plot(line, dataSpline, roundBoundary);
+		PolarBoundary rightTopBoundary;
+		rightTopBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightTopBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightTopBoundary.cropRelativePolar({ 0, 0.25 }, { 0.35, 0.0 });
+		grafici.plot(line, dataSpline, rightTopBoundary);
 
-	// 	gfx.flush();
-	// }
+		gfx.flush();
+	}
 
 	// {
 	// 	/* Colors */
