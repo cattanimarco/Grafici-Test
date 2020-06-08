@@ -11,7 +11,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(320, 240, "imgs/simple_plot.bmp");
+		File_GFX gfx(640, 480, "imgs/simple_plot.bmp");
 		grafici.begin(gfx, Colors::blackAndWhite);
 
 		ArrayFloat y(array, num_elem);
@@ -26,7 +26,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(320, 240, "imgs/linear_interpolation.bmp");
+		File_GFX gfx(640, 480, "imgs/linear_interpolation.bmp");
 		grafici.begin(gfx, Colors::rainbow);
 
 		Linear x(num_elem);
@@ -45,7 +45,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(320, 240, "imgs/spline_interpolation.bmp");
+		File_GFX gfx(640, 480, "imgs/spline_interpolation.bmp");
 		grafici.begin(gfx, Colors::rainbow);
 
 		Linear x(num_elem);
@@ -64,7 +64,7 @@ int main()
 		constexpr size_t histogram_size = 20;
 		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
 
-		File_GFX gfx(320, 240, "imgs/multiplot.bmp");
+		File_GFX gfx(640, 480, "imgs/multiplot.bmp");
 		grafici.begin(gfx, Colors::temperature);
 		grafici.clear();
 
@@ -90,7 +90,7 @@ int main()
 		constexpr size_t histogram_size = 10;
 		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
 
-		File_GFX gfx(320, 240, "imgs/subplot.bmp");
+		File_GFX gfx(640, 480, "imgs/subplot.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
@@ -122,7 +122,7 @@ int main()
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(320, 240, "imgs/styles.bmp");
+		File_GFX gfx(640, 480, "imgs/styles.bmp");
 		grafici.begin(gfx, Colors::blackAndWhite);
 		grafici.clear();
 
@@ -146,27 +146,29 @@ int main()
 		/* boundary_projections */
 
 		constexpr size_t source_data_size = 9;
-		constexpr size_t spline_size = 97;
+		constexpr size_t spline_size = 33;
 		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
-		File_GFX gfx(320, 240, "imgs/boundary_projections.bmp");
-		grafici.begin(gfx, Colors::csParula);
+		File_GFX gfx(640, 480, "imgs/boundary_projections.bmp");
+		grafici.begin(gfx, Colors::csHeat);
 		grafici.clear();
 
 		/* Load raw data */
 		Linear x(source_data_size);
 		ArrayFloat y(array, source_data_size);
-		Constant opt(source_data_size, 1.0);
+		Constant opt(source_data_size, 0.5);
 		SplineInterpolator dataSpline{ x, y, y, opt, spline_size };
 
 		Boundary leftBoundary;
 		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		leftBoundary.cropGridCartesian(1, 2, 0, 0);
+		grafici.plot(axis, Linear(25), Linear(10), Constant(25, 0.1), leftBoundary);
 		grafici.plot(bar, dataSpline, leftBoundary);
 
 		PolarBoundary rightBoundary;
 		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		rightBoundary.cropGridCartesian(1, 2, 0, 1);
+		grafici.plot(axis, Linear(25), Linear(10), Constant(25, 0.1), rightBoundary);
 		grafici.plot(bar, dataSpline, rightBoundary);
 
 		gfx.flush();
@@ -179,7 +181,7 @@ int main()
 		constexpr size_t spline_size = 49;
 		float array[source_data_size] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
-		File_GFX gfx(320, 240, "imgs/polar_boundary.bmp");
+		File_GFX gfx(640, 480, "imgs/polar_boundary.bmp");
 		grafici.begin(gfx, Colors::csParula);
 		grafici.clear();
 
@@ -195,6 +197,15 @@ int main()
 		leftBoundary.cropGridPolar(1, 2, 0, 0);
 		grafici.plot(bar, dataSpline, leftBoundary);
 
+		PolarBoundary rightBoundary;
+		Linear xAxe(27);
+		Linear yAxe(5);
+		Constant cAxe(10, 0);
+		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.0 });
+		grafici.plot(axis, xAxe, yAxe, cAxe, rightBoundary);
+
 		PolarBoundary rightBottomBoundary;
 		rightBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		rightBottomBoundary.cropGridCartesian(1, 2, 0, 1);
@@ -205,7 +216,7 @@ int main()
 		middleBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		middleBottomBoundary.cropGridCartesian(1, 2, 0, 1);
 		middleBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0.35, 0.35 });
-		grafici.plot(scatter, dataSpline, middleBottomBoundary);
+		grafici.plot(scatter, dataSpline.x(), dataSpline.y(), dataSpline.c(), Constant(spline_size, 0.01), middleBottomBoundary);
 
 		PolarBoundary rightTopBoundary;
 		rightTopBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
@@ -224,7 +235,7 @@ int main()
 
 	// 	float dataArray[2] = { 2, 2 };
 
-	// 	File_GFX gfx(320, 240, "imgs/colors.bmp");
+	// 	File_GFX gfx(640, 480, "imgs/colors.bmp");
 
 	// 	grafici.begin(gfx);
 	// 	dataset.begin(dataArray, 1, 2);
