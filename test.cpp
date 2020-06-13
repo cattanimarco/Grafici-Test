@@ -91,7 +91,7 @@ int main()
 		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
 
 		File_GFX gfx(640, 480, "imgs/subplot.bmp");
-		grafici.begin(gfx, Colors::csParula);
+		grafici.begin(gfx, Colors::parula);
 		grafici.clear();
 
 		Linear x(source_data_size);
@@ -150,7 +150,7 @@ int main()
 		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
 		File_GFX gfx(640, 480, "imgs/boundary_projections.bmp");
-		grafici.begin(gfx, Colors::csHeat);
+		grafici.begin(gfx, Colors::heat);
 		grafici.clear();
 
 		/* Load raw data */
@@ -182,7 +182,7 @@ int main()
 		float array[source_data_size] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
 
 		File_GFX gfx(640, 480, "imgs/polar_boundary.bmp");
-		grafici.begin(gfx, Colors::csParula);
+		grafici.begin(gfx, Colors::parula);
 		grafici.clear();
 
 		/* Load raw data */
@@ -227,6 +227,36 @@ int main()
 		gfx.flush();
 	}
 
+	{
+		/* Colors */
+		constexpr size_t data_size = 240;
+
+		File_GFX gfx(640, 480, "imgs/colors.bmp");
+		grafici.begin(gfx, Colors::parula);
+		grafici.clear();
+
+		Linear x(data_size);
+		Constant y(data_size, 1.0);
+		Constant opt(data_size, 1.0);
+
+		const ColorMap *colorPlots[] = { &Colors::rainbow,
+			                             &Colors::temperature,
+			                             &Colors::blackAndWhite,
+			                             &Colors::cmy,
+			                             &Colors::heat,
+			                             &Colors::bright,
+			                             &Colors::semaphore,
+			                             &Colors::parula };
+
+		for (size_t idx = 0; idx < sizeof(colorPlots) / sizeof(ColorMap*); idx++)
+		{			
+			Boundary boundary;
+			*(grafici.colorMap()) = colorPlots[idx];
+			boundary.cropGridCartesian(8, 1, idx).cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+			grafici.plot(bar, x, y, x, opt, boundary);
+		}
+		gfx.flush();
+	}
 	// {
 	// 	/* Colors */
 	// 	DataSource::Float dataset;
@@ -249,9 +279,9 @@ int main()
 	// 		                      csBw,
 	// 		                      csCmyk,
 	// 		                      csFrance,
-	// 		                      csHeat,
-	// 		                      csNeon,
-	// 		                      csParula,
+	// 		                      heat,
+	// 		                      semaphore,
+	// 		                      parula,
 	// 		                      csRainbow };
 
 	// 	for (int i = 0; i < sizeof(colorPlots) / sizeof(ColorSet); i++)
@@ -263,126 +293,6 @@ int main()
 	// 	}
 
 	// 	gfx.flush();
-	// }
-
-	// {
-	// 	DataSource::Float dataset;
-	// 	DataSource::LinearInterpolator dataLinearInterpolator;
-	// 	DataSource::Spline dataSpline;
-	// 	Histogram dataHist;
-	// 	/* == INTERPOLATION == */
-	// 	//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
-	// 	float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
-
-	// 	Adafruit_GFX *gfx = new File_GFX(1024, 768, "interpolation.bmp");
-
-	// 	grafici.begin(*gfx);
-
-	// 	grafici.style.colorPalette = &csBright;
-	// 	grafici.style.colorSource = ColorSource::computeFromX;
-
-	// 	dataset.begin(dataArrayY, dataArrayY, 13);
-	// 	dataLinearInterpolator.begin(dataset, 100);
-	// 	dataSpline.begin(dataset, 100);
-
-	// 	grafici.clear();
-	// 	barPlot.thickness = 0.0;
-
-	// 	grafici.boundary.subBoundary(1, 3, 0);
-	// 	grafici.boundary.crop(0.04, 0.04, 0.04, 0.02);
-	// 	grafici.plot(axisPlot, dataset);
-	// 	grafici.plot(line, dataset);
-	// 	grafici.plot(barPlot, dataset);
-
-	// 	grafici.boundary.fullScreen();
-	// 	grafici.boundary.subBoundary(1, 3, 1);
-	// 	grafici.boundary.crop(0.04, 0.04, 0.02, 0.02);
-	// 	grafici.plot(axisPlot, dataLinearInterpolator);
-	// 	grafici.plot(line, dataLinearInterpolator);
-	// 	grafici.plot(barPlot, dataLinearInterpolator);
-
-	// 	grafici.boundary.fullScreen();
-	// 	grafici.boundary.subBoundary(1, 3, 2);
-	// 	grafici.boundary.crop(0.04, 0.04, 0.02, 0.04);
-	// 	grafici.plot(axisPlot, dataSpline);
-	// 	grafici.plot(line, dataSpline);
-	// 	grafici.plot(barPlot, dataSpline);
-
-	// 	//flush to file
-	// 	((File_GFX *)gfx)->flush();
-	// }
-
-	// {
-	// 	DataSource::Float dataset;
-	// 	DataSource::LinearInterpolator dataLinearInterpolator;
-	// 	DataSource::Spline dataSpline;
-	// 	Histogram dataHist;
-	// 	/* == COLOR SCHEMES == */
-	// 	float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-	// 	Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
-
-	// 	grafici.begin(*gfx);
-	// 	grafici.style.colorSource = ColorSource::computeFromX;
-
-	// 	// dataset - we provide the same array for Y and values so that the color encodes the bar height
-	// 	dataset.begin(dataArrayY, dataArrayY, 11);
-	// 	dataSpline.begin(dataset, 20);
-
-	// 	ColorSet colorPalettes[6] = { csRainbow, csBright, csFrance, csCmyk, csHeat, csBw };
-
-	// 	barPlot.thickness = 0.9;
-
-	// 	for (int i = 0; i < 6; i++)
-	// 	{
-	// 		Boundary boundary;
-	// 		grafici.style.colorPalette = &(colorPalettes[i]);
-
-	// 		boundary.subBoundary(2, 3, i);
-	// 		grafici.clear(boundary);
-
-	// 		boundary.crop(0.02, 0.02, 0.02, 0.02);
-	// 		grafici.plot(barPlot, dataSpline, boundary);
-	// 	}
-
-	// 	//flush to file
-	// 	((File_GFX *)gfx)->flush();
-	// }
-
-	// {
-	// 	DataSource::Float dataset;
-	// 	DataSource::LinearInterpolator dataLinearInterpolator;
-	// 	DataSource::Spline dataSpline;
-	// 	Histogram dataHist;
-	// 	/* == PLOT STYLES == */
-	// 	float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
-
-	// 	Adafruit_GFX *gfx = new File_GFX(1024, 768, "plot_types.bmp");
-
-	// 	grafici.begin(*gfx);
-	// 	grafici.style.colorSource = ColorSource::computeFromY;
-	// 	grafici.style.colorPalette = &csCmyk;
-	// 	grafici.clear();
-
-	// 	// dataset - we provide the same array for Y and values so that the color encodes the bar height
-	// 	dataset.begin(dataArrayY, 1.0, 11);
-	// 	dataSpline.begin(dataset, 20);
-
-	// 	Plotter *plots[6] = { &barcodePlot, &barPlot, &line, &scatterPlot, &line, &line };
-
-	// 	barPlot.thickness = 0.9;
-
-	// 	for (int i = 0; i < 6; i++)
-	// 	{
-	// 		Boundary boundary;
-	// 		boundary.subBoundary(2, 3, i);
-	// 		boundary.crop(0.02, 0.02, 0.02, 0.02);
-
-	// 		grafici.plot(*plots[i], dataSpline, boundary);
-	// 	}
-
-	// 	//flush to file
-	// 	((File_GFX *)gfx)->flush();
 	// }
 
 	return 0;
