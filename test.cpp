@@ -80,6 +80,7 @@ int main()
 		lineBoundary.cropRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
 		grafici.plot(bar, BarIndex(histogram_size), dataHistogram, BarIndex(histogram_size), Constant(histogram_size, 0.0), barBoundary);
 		grafici.plot(line, dataSpline, lineBoundary);
+		grafici.plot(scatter, dataSpline.x(), dataSpline.y(), dataSpline.y(), Constant(spline_size, 0.015), lineBoundary);
 		gfx.flush();
 	}
 
@@ -102,11 +103,13 @@ int main()
 		/* Data plot */
 		Boundary leftBoundary;
 		leftBoundary.cropGridCartesian(1, 2, 0, 0).cropAbsoluteCartesian({ 0.04, 0.02 }, { 0.04, 0.04 });
+		grafici.plot(axis, Linear(6), Linear(11), Constant(12, 0.1), leftBoundary);
 		grafici.plot(line, dataSpline, leftBoundary);
 
 		/* Traditional histogram */
 		Boundary rightTopBoundary;
 		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
+		grafici.plot(axis, Linear(11), Linear(6), Constant(11, 0.1), rightTopBoundary);
 		grafici.plot(bar, BarIndex(histogram_size), dataHistogram, BarIndex(histogram_size), Constant(histogram_size, 0.5), rightTopBoundary);
 
 		/* Stripe graph */
@@ -133,8 +136,6 @@ int main()
 		Constant c(num_elem, 1);
 		Boundary boundary;
 
-		/* TODO scatter size to behave like barplot thickness? */
-
 		boundary.cropAbsoluteCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
 		grafici.plot(scatter, x, y, c, opt, boundary);
 		grafici.plot(line, x, y, c, boundary);
@@ -150,7 +151,7 @@ int main()
 		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
 
 		File_GFX gfx(640, 480, "imgs/boundary_projections.bmp");
-		grafici.begin(gfx, Colors::heat);
+		grafici.begin(gfx, Colors::blackAndWhite);
 		grafici.clear();
 
 		/* Load raw data */
@@ -192,19 +193,17 @@ int main()
 		SplineInterpolator dataSpline{ x, y, y, opt, spline_size };
 
 		PolarBoundary leftBoundary;
-		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		leftBoundary.cropGridCartesian(1, 2, 0, 0);
+		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		leftBoundary.cropGridPolar(1, 2, 0, 0);
+		grafici.plot(axis, Linear(19), Linear(5), Constant(10,0), leftBoundary);
 		grafici.plot(bar, dataSpline, leftBoundary);
 
 		PolarBoundary rightBoundary;
-		Linear xAxe(27);
-		Linear yAxe(5);
-		Constant cAxe(10, 0);
-		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		rightBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
 		rightBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.0 });
-		grafici.plot(axis, xAxe, yAxe, cAxe, rightBoundary);
+		grafici.plot(axis, Linear(28), Linear(5), Constant(10,0), rightBoundary);
 
 		PolarBoundary rightBottomBoundary;
 		rightBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
@@ -248,8 +247,8 @@ int main()
 			                             &Colors::semaphore,
 			                             &Colors::parula };
 
-		for (size_t idx = 0; idx < sizeof(colorPlots) / sizeof(ColorMap*); idx++)
-		{			
+		for (size_t idx = 0; idx < sizeof(colorPlots) / sizeof(ColorMap *); idx++)
+		{
 			Boundary boundary;
 			*(grafici.colorMap()) = colorPlots[idx];
 			boundary.cropGridCartesian(8, 1, idx).cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
