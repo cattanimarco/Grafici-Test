@@ -121,25 +121,23 @@ int main()
 	}
 
 	{
-		/* styles plot */
+		/* heatmap plot */
 		constexpr size_t num_elem = 5;
 		float array[num_elem] = { 1, 0, 2, 1, 2 };
 
-		File_GFX gfx(640, 480, "imgs/styles.bmp");
-		grafici.begin(gfx, Colors::blackAndWhite);
+		File_GFX gfx(640, 480, "imgs/heatmap.bmp");
+		grafici.begin(gfx, Colors::heat);
 		grafici.clear();
 
 		Linear x(num_elem);
 		ArrayFloat y(array, num_elem);
 		Constant opt(num_elem, 0.01);
-		Constant optBar(num_elem, 0);
 		Constant c(num_elem, 1);
 		Boundary boundary;
 
 		boundary.cropAbsoluteCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
+		grafici.plot(heatmap, x, y, c, opt, boundary);
 		grafici.plot(scatter, x, y, c, opt, boundary);
-		grafici.plot(line, x, y, c, boundary);
-		grafici.plot(bar, x, y, c, optBar, boundary);
 		gfx.flush();
 	}
 

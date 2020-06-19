@@ -19,5 +19,5 @@ run: lib test
 
 clean:
 	rm -f $(OBJ) ezdib.o test
-	rm -f imgs/*.bmp 
+	#rm -f imgs/*.bmp 
 
