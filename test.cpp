@@ -132,8 +132,8 @@ int main()
 
 		ArrayFloat x(arrayX, num_elem);
 		ArrayFloat y(arrayY, num_elem);
-		Constant opt(num_elem, 0.01);
-		Constant c(num_elem, 1);
+		Constant opt(num_elem, 0.02);
+		Constant c(num_elem, 0);
 
 		Boundary bl;
 		bl.cropGridCartesian(2, 2, 0, 0);
