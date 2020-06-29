@@ -147,6 +147,12 @@ int main()
 		grafici.plot(bubblemap, x, y, c, opt, br);
 		grafici.plot(scatter, x, y, c, opt, br);
 
+		Boundary tl;
+		tl.cropGridCartesian(2, 2, 1, 0);
+		tl.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+		grafici.plot(cliquegraph, x, y, x, opt, tl);
+		grafici.plot(scatter, x, y, c, opt, tl);
+
 		gfx.flush();
 	}
 
@@ -265,8 +271,8 @@ int main()
 	}
 	// {
 	// 	/* Colors */
-	// 	DataSource::Float dataset;
-	// 	DataSource::LinearInterpolator dataLinearInterpolator;
+	// 	DataSources::Float dataset;
+	// 	DataSources::LinearInterpolator dataLinearInterpolator;
 	// 	RoundBoundary roundBoundary;
 
 	// 	float dataArray[2] = { 2, 2 };
