@@ -150,8 +150,14 @@ int main()
 		Boundary tl;
 		tl.cropGridCartesian(2, 2, 1, 0);
 		tl.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
-		grafici.plot(cliquegraph, x, y, x, opt, tl);
+		grafici.plot(cellmap, x, y, x, opt, tl);
 		grafici.plot(scatter, x, y, c, opt, tl);
+
+		Boundary tr;
+		tr.cropGridCartesian(2, 2, 1, 1);
+		tr.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+		grafici.plot(cliquegraph, x, y, x, opt, tr);
+		grafici.plot(scatter, x, y, c, opt, tr);
 
 		gfx.flush();
 	}
