@@ -289,14 +289,14 @@ int main()
 	}
 
 	{
-		/* manual shared axis */
+		/* shared axis */
 		constexpr size_t num_elem = 5;
 		float array_y1[num_elem] = { 1, 2, 3, 4, 5 };
 		float array_y2[num_elem] = { 2, 3, 4, 5, 6 };
 		float array_x1[num_elem] = { 2, 3, 4, 5, 6 };
 		float array_x2[num_elem] = { 0, 1, 2, 3, 4 };
 
-		File_GFX gfx(640, 480, "imgs/manual_shared_axis.bmp");
+		File_GFX gfx(640, 480, "imgs/shared_axis.bmp");
 		grafici.begin(gfx, Colors::blackAndWhite);
 		grafici.clear();
 
@@ -307,16 +307,14 @@ int main()
 		ArrayFloat x1(array_x1, num_elem);
 		ArrayFloat x2(array_x2, num_elem);
 
-		x1.limits() = { 0, 6 };
-		x2.limits() = { 0, 6 };
-		xAxis.limits() = { 0, 6 };
-		y1.limits() = { 1, 6 };
-		y2.limits() = { 1, 6 };
-		yAxis.limits() = { 1, 6 };
+		/* set each limit as the union (using + sign) of all the limits*/
+		x1.limits() = x2.limits() = xAxis.limits() = (x1.limits() + x2.limits() + xAxis.limits());
+		y1.limits() = y2.limits() = yAxis.limits() = (y1.limits() + y2.limits() + yAxis.limits());
 
 		grafici.colorMap(Colors::blackAndWhite);
 		grafici.plot(axis, xAxis, yAxis, Constant(8, 0.1));
 		grafici.colorMap(Colors::semaphore);
+		
 		grafici.plot(line, x1, y1, y1);
 		grafici.plot(line, x2, y2, y2);
 		gfx.flush();
