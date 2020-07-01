@@ -1,416 +1,322 @@
 #include "File_GFX.h"
-
 #include "Grafici-GFX/src/Grafici.h"
-#include "Grafici-GFX/src/data/DataSetFloat.h"
-#include "Grafici-GFX/src/data/DataSetHistogram.h"
-#include "Grafici-GFX/src/data/DataSetInterpolator.h"
-#include "Grafici-GFX/src/data/DataSetSpline.h"
-#include "Grafici-GFX/src/plots/axisPlot.h"
-#include "Grafici-GFX/src/plots/barPlot.h"
-#include "Grafici-GFX/src/plots/barcodePlot.h"
-#include "Grafici-GFX/src/plots/linePlot.h"
-#include "Grafici-GFX/src/plots/scatterPlot.h"
 
 int main()
 {
 
+	/* taxonomy from https://vcg.seas.harvard.edu/files/pfister/files/viztaxonomy2013.pdf */
+
 	{
-		/* simple_plot */
-		DataSetFloat dataset;
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		/* simple plot */
+		File_GFX gfx(640, 480, "imgs/simple_plot.bmp");
 
-		File_GFX gfx(640, 320, "imgs/simple_plot.bmp");
+		constexpr size_t num_elem = 5;
+		float array[num_elem] = { 1, 0, 2, 1, 2 };
+		ArrayFloat y(array, num_elem);
 
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-
+		grafici.begin(gfx, Colors::blackAndWhite);
 		grafici.clear();
-		grafici.plot(linePlot, dataset);
+
+		grafici.plot(line, Linear(num_elem), y, Constant(num_elem, 1));
 
 		gfx.flush();
 	}
 
 	{
-		/* data interpolation */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
+		/* linear interpolation */
+		File_GFX gfx(640, 480, "imgs/linear_interpolation.bmp");
 
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		constexpr size_t num_elem = 5;
+		float array[num_elem] = { 1, 0, 2, 1, 2 };
+		Linear x(num_elem);
+		ArrayFloat y(array, num_elem);
+		// Chose a big enough number for the samples. Too small and you risk sub-sampling issues
+		// Even better chose samples = n + (n-1) * x
+		LinearInterpolator dataLinear{ x, y, y, y, 85 };
 
-		File_GFX gfx(640, 320, "imgs/interpolation.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(dataset, 100);
-
+		grafici.begin(gfx, Colors::rainbow);
 		grafici.clear();
-		grafici.plot(linePlot, dataSpline);
+
+		grafici.plot(line, dataLinear);
 
 		gfx.flush();
 	}
 
 	{
-		/* data analysis */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
-		DataSetHistogram dataHist;
+		/* spline interpolation */
+		File_GFX gfx(640, 480, "imgs/spline_interpolation.bmp");
 
-		float dataArray[5] = { 1, 0, 2, 2, 1 };
+		constexpr size_t num_elem = 5;
+		float array[num_elem] = { 1, 0, 2, 1, 2 };
+		Linear x(num_elem);
+		ArrayFloat y(array, num_elem);
+		SplineInterpolator dataSpline{ x, y, y, y, 85 };
 
-		File_GFX gfx(640, 320, "imgs/histogram.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(dataset, 100); // interpolate 5 point to 100 points
-		dataHist.begin(dataSpline, 30); // histogram of interpolation
-
-		grafici.clear();
-		grafici.plot(barPlot, dataHist);
-
-		gfx.flush();
-	}
-
-	{
-		/* Subplot */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
-		DataSetHistogram dataHist;
-
-		float dataArray[5] = { 1, 0, 2, 2, 1 };
-
-		File_GFX gfx(640, 320, "imgs/subplot.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(dataset, 100);
-		dataHist.begin(dataSpline, 30);
-
+		grafici.begin(gfx, Colors::rainbow);
 		grafici.clear();
 
-		// set boundaries to full screen
-		// divide screen in 2 colum and select first one
-		// add empty border
-		grafici.boundaries.fullScreen().subBoundaries(1, 2, 0).addBorder(0.04, 0.04, 0.04, 0.02);
-		grafici.plot(linePlot, dataSpline);
-
-		// set boundaries to full screen
-		// divide screen in 2 colum and select first one
-		// add empty border
-		grafici.boundaries.fullScreen().subBoundaries(1, 2, 1).addBorder(0.04, 0.04, 0.02, 0.04);
-		grafici.plot(barPlot, dataHist);
+		grafici.plot(line, dataSpline);
 
 		gfx.flush();
 	}
 
 	{
 		/* Multiplot */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
+		File_GFX gfx(640, 480, "imgs/multiplot.bmp");
 
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		constexpr size_t source_data_size = 6;
+		constexpr size_t spline_size = 86;
+		constexpr size_t histogram_size = 20;
+		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		SplineInterpolator dataSpline{ x, y, y, y, spline_size };
+		Histogram dataHistogram{ dataSpline.y(), histogram_size };
+		Boundary barBoundary;
+		Boundary lineBoundary;
 
-		File_GFX gfx(640, 320, "imgs/multiplot.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(dataset, 100);
-		scatterPlot.markerSize = 0.0002; // this is defined a proportion of the area of the plot
-
+		grafici.begin(gfx, Colors::temperature);
 		grafici.clear();
-		grafici.boundaries.fullScreen().addBorder(0.04, 0.04, 0.04, 0.04); // add empty border
-		grafici.plot(linePlot, dataSpline);                                // keep the same boundaries and plot multiple times
-		grafici.plot(scatterPlot, dataSpline);
+
+		barBoundary.cropRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 }).boundaryRotation() = BoundaryRotation::clockWise90;
+		lineBoundary.cropRelativeCartesian({ 0.04, 0.04 }, { 0.04, 0.04 });
+		grafici.plot(bar, BarIndex(histogram_size), dataHistogram, BarIndex(histogram_size), Constant(histogram_size, 0.0), barBoundary);
+		grafici.plot(line, dataSpline, lineBoundary);
+		grafici.plot(scatter, dataSpline.x(), dataSpline.y(), dataSpline.y(), Constant(spline_size, 0.015), lineBoundary);
 
 		gfx.flush();
 	}
 
 	{
-		/* Transformations */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
+		/* Subplot */
+		File_GFX gfx(640, 480, "imgs/subplot.bmp");
 
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		constexpr size_t source_data_size = 6;
+		constexpr size_t spline_size = 86;
+		constexpr size_t histogram_size = 10;
+		float array[source_data_size] = { 1, 0, 2, 1, 2, 2 };
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		SplineInterpolator dataSpline{ x, y, y, y, spline_size };
+		Histogram dataHistogram{ dataSpline.y(), histogram_size };
+		Boundary leftBoundary;
+		Boundary rightTopBoundary;
+		Boundary rightBottomBoundary;
 
-		File_GFX gfx(640, 320, "imgs/transformations.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(dataset, 100);
-
+		grafici.begin(gfx, Colors::parula);
 		grafici.clear();
 
-		grafici.boundaries.fullScreen().subBoundaries(2, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.plot(barPlot, dataSpline);
+		/* Traditional plot (interpolated via spline) */
+		leftBoundary.cropGridCartesian(1, 2, 0, 0).cropAbsoluteCartesian({ 0.04, 0.02 }, { 0.04, 0.04 });
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, Linear(6), Linear(11), Constant(12, 0.1), leftBoundary);
+		grafici.colorMap(Colors::parula);
+		grafici.plot(line, dataSpline, leftBoundary);
 
-		grafici.boundaries.fullScreen().subBoundaries(2, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.boundaries.horizzontalFlip();
-		grafici.plot(barPlot, dataSpline);
+		/* Traditional histogram */
+		rightTopBoundary.cropGridCartesian(2, 2, 0, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.04, 0.02 });
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, Linear(11), Linear(6), Constant(11, 0.1), rightTopBoundary);
+		grafici.colorMap(Colors::parula);
+		grafici.plot(bar, BarIndex(histogram_size), dataHistogram, BarIndex(histogram_size), Constant(histogram_size, 0.5), rightTopBoundary);
 
-		grafici.boundaries.fullScreen().subBoundaries(2, 2, 2).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.boundaries.verticalFlip();
-		grafici.plot(barPlot, dataSpline);
-
-		grafici.boundaries.fullScreen().subBoundaries(2, 2, 3).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.boundaries.horizzontalFlip().verticalFlip();
-		grafici.plot(barPlot, dataSpline);
+		/* Stripe graph */
+		rightBottomBoundary.cropGridCartesian(2, 2, 1, 1).cropAbsoluteCartesian({ 0.02, 0.04 }, { 0.02, 0.04 });
+		grafici.plot(bar, dataSpline.y(), Constant(spline_size, 1.0), dataSpline.y(), Constant(spline_size, 0.0), rightBottomBoundary);
 
 		gfx.flush();
 	}
 
 	{
-		/* Styles */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
+		/* heatmap plot */
+		File_GFX gfx(640, 480, "imgs/heatmaps.bmp");
 
-		float dataArray[5] = { 1, 0, 2, 1, 2 };
+		constexpr size_t num_elem = 6;
+		float arrayX[num_elem] = { 0, 1, 2, 2, 3, 4 };
+		float arrayY[num_elem] = { 1, 0, 2, 1, 1, 2 };
+		ArrayFloat x(arrayX, num_elem);
+		ArrayFloat y(arrayY, num_elem);
+		Constant opt(num_elem, 0.02);
+		Constant c(num_elem, 0);
+		Boundary bl;
+		Boundary br;
+		Boundary tl;
+		Boundary tr;
 
-		File_GFX gfx(640, 320, "imgs/styles.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 5);
-		dataSpline.begin(dataset, 30);
-
+		grafici.begin(gfx, Colors::parula);
 		grafici.clear();
-		axisPlot.numAxisX = 9;
-		axisPlot.numAxisY = 3;
-		scatterPlot.markerSize = 0.0001;
 
-		grafici.boundaries.fullScreen().subBoundaries(1, 3, 0).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.plot(axisPlot, dataSpline);
-		grafici.plot(linePlot, dataSpline);
+		bl.cropGridCartesian(2, 2, 0, 0);
+		bl.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+		grafici.plot(heatmap, x, y, c, opt, bl);
+		grafici.plot(scatter, x, y, c, opt, bl);
 
-		grafici.boundaries.fullScreen().subBoundaries(1, 3, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.plot(axisPlot, dataSpline);
-		grafici.plot(barPlot, dataSpline);
+		br.cropGridCartesian(2, 2, 0, 1);
+		br.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+		grafici.plot(bubblemap, x, y, c, opt, br);
+		grafici.plot(scatter, x, y, c, opt, br);
 
-		grafici.boundaries.fullScreen().subBoundaries(1, 3, 2).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.plot(axisPlot, dataSpline);
-		grafici.plot(scatterPlot, dataSpline);
+		tl.cropGridCartesian(2, 2, 1, 0);
+		tl.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+		grafici.plot(cellmap, x, y, x, opt, tl);
+		grafici.plot(scatter, x, y, c, opt, tl);
+
+		tr.cropGridCartesian(2, 2, 1, 1);
+		tr.cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+		grafici.plot(cliquegraph, x, y, x, opt, tr);
+		grafici.plot(scatter, x, y, c, opt, tr);
 
 		gfx.flush();
 	}
 
 	{
-		/* Round 1 */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
-		RoundBoundaries roundBoundaries;
+		/* boundary_projections */
+		File_GFX gfx(640, 480, "imgs/boundary_projections.bmp");
 
-		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
-
-		File_GFX gfx(640, 320, "imgs/round_1.bmp");
+		constexpr size_t source_data_size = 9;
+		constexpr size_t spline_size = 33;
+		float array[source_data_size] = { 0, 2, 0, 1.5, 0, 0.5, 0, 1, 0 };
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		Constant opt(source_data_size, 0.5);
+		SplineInterpolator dataSpline{ x, y, y, opt, spline_size };
+		Boundary leftBoundary;
+		PolarBoundary rightBoundary;
 
 		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 9);
-		dataSpline.begin(dataset, 100);
-		axisPlot.numAxisX = 10;
-		axisPlot.numAxisY = 4;
-
 		grafici.clear();
 
-		grafici.boundaries.fullScreen().subBoundaries(1, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.plot(axisPlot, dataSpline);
-		grafici.plot(barPlot, dataSpline);
+		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		leftBoundary.cropGridCartesian(1, 2, 0, 0);
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, Linear(25), Linear(10), Constant(25, 0.1), leftBoundary);
+		grafici.colorMap(Colors::heat);
+		grafici.plot(bar, dataSpline, leftBoundary);
 
-		roundBoundaries.fullScreen().subBoundaries(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-		grafici.plot(axisPlot, dataSpline, roundBoundaries);
-		grafici.plot(barPlot, dataSpline, roundBoundaries);
+		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightBoundary.cropGridCartesian(1, 2, 0, 1);
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, Linear(25), Linear(10), Constant(25, 0.1), rightBoundary);
+		grafici.colorMap(Colors::heat);
+		grafici.plot(bar, dataSpline, rightBoundary);
 
 		gfx.flush();
 	}
 
 	{
-		/* Round 2 */
-		DataSetFloat dataset;
-		DataSetSpline dataSpline;
-		RoundBoundaries roundBoundaries;
+		/* Polar Boundary */
+		File_GFX gfx(640, 480, "imgs/polar_boundary.bmp");
 
-		float dataArray[9] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
+		constexpr size_t source_data_size = 9;
+		constexpr size_t spline_size = 49;
+		float array[source_data_size] = { 0, 2, 0, 2, 0, 1, 0, 1, 0 };
+		Linear x(source_data_size);
+		ArrayFloat y(array, source_data_size);
+		Constant opt(source_data_size, 0.0);
+		SplineInterpolator dataSpline{ x, y, y, opt, spline_size };
+		PolarBoundary leftBoundary;
+		PolarBoundary rightBoundary;
+		PolarBoundary rightBottomBoundary;
+		PolarBoundary middleBottomBoundary;
+		PolarBoundary rightTopBoundary;
 
-		File_GFX gfx(640, 320, "imgs/round_2.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 9);
-		dataSpline.begin(dataset, 100);
-		axisPlot.numAxisX = 10;
-		axisPlot.numAxisY = 4;
-
+		grafici.begin(gfx, Colors::parula);
 		grafici.clear();
 
-		roundBoundaries.fullScreen().subBoundaries(1, 2, 0).addBorder(0.02, 0.02, 0.02, 0.02);
-		roundBoundaries.subBoundariesRadial(1, 2, 0);
-		grafici.plot(axisPlot, dataSpline, roundBoundaries);
-		grafici.plot(barPlot, dataSpline, roundBoundaries);
+		leftBoundary.cropGridCartesian(1, 2, 0, 0);
+		leftBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		leftBoundary.cropGridPolar(1, 2, 0, 0);
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, Linear(19), Linear(5), Constant(10, 0), leftBoundary);
+		grafici.colorMap(Colors::parula);
+		grafici.plot(bar, dataSpline, leftBoundary);
 
-		roundBoundaries.fullScreen().subBoundaries(1, 2, 1).addBorder(0.02, 0.02, 0.02, 0.02);
-		roundBoundaries.addBorderRadial(0.5, 0.1, 0.25, 0);
-		grafici.plot(axisPlot, dataSpline, roundBoundaries);
-		grafici.plot(barPlot, dataSpline, roundBoundaries);
+		rightBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.0 });
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, Linear(28), Linear(5), Constant(10, 0), rightBoundary);
+		grafici.colorMap(Colors::parula);
 
-		roundBoundaries.fullScreen().subBoundaries(1, 2, 1);
-		roundBoundaries.addBorderRadial(0, 0.6, 0.25, 0);
-		grafici.plot(axisPlot, dataSpline, roundBoundaries);
-		grafici.plot(linePlot, dataSpline, roundBoundaries);
+		rightBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightBottomBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0, 0.5 });
+		grafici.plot(bar, dataSpline, rightBottomBoundary);
+
+		middleBottomBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		middleBottomBoundary.cropGridCartesian(1, 2, 0, 1);
+		middleBottomBoundary.cropRelativePolar({ 0, 0.25 }, { 0.35, 0.35 });
+		grafici.plot(scatter, dataSpline.x(), dataSpline.y(), dataSpline.c(), Constant(spline_size, 0.01), middleBottomBoundary);
+
+		rightTopBoundary.cropAbsoluteCartesian({ 0.02, 0.02 }, { 0.02, 0.02 });
+		rightTopBoundary.cropGridCartesian(1, 2, 0, 1);
+		rightTopBoundary.cropRelativePolar({ 0, 0.25 }, { 0.5, 0.0 });
+		grafici.plot(line, dataSpline, rightTopBoundary);
 
 		gfx.flush();
 	}
 
 	{
 		/* Colors */
-		DataSetFloat dataset;
-		DataSetInterpolator dataInterpolator;
-		RoundBoundaries roundBoundaries;
+		File_GFX gfx(640, 480, "imgs/colors.bmp");
 
-		float dataArray[2] = { 2, 2 };
+		constexpr size_t data_size = 240;
+		const ColorMap *colorPlots[] = { &Colors::rainbow,
+			                             &Colors::temperature,
+			                             &Colors::blackAndWhite,
+			                             &Colors::cmy,
+			                             &Colors::heat,
+			                             &Colors::bright,
+			                             &Colors::semaphore,
+			                             &Colors::parula };
+		Linear x(data_size);
+		Constant y(data_size, 1.0);
+		Constant opt(data_size, 1.0);
 
-		File_GFX gfx(640, 320, "imgs/colors.bmp");
-
-		grafici.begin(gfx);
-		dataset.begin(dataArray, 1, 2);
-		dataset.yMin = 0; /* ovverride min value */
-		dataInterpolator.begin(dataset, 100);
-		grafici.style.colorSource = ColorSource::computeFromX;
-
+		grafici.begin(gfx, Colors::parula);
 		grafici.clear();
 
-		ColorSet colorPlots[] = { csBright,
-			                      csBw,
-			                      csCmyk,
-			                      csFrance,
-			                      csHeat,
-			                      csNeon,
-			                      csParula,
-			                      csRainbow };
-
-		for (int i = 0; i < sizeof(colorPlots) / sizeof(ColorSet); i++)
+		for (size_t idx = 0; idx < sizeof(colorPlots) / sizeof(ColorMap *); idx++)
 		{
-			grafici.style.setPalette(colorPlots[i]);
-			roundBoundaries.fullScreen().subBoundaries(2, 4, i).addBorder(0.02, 0.02, 0.02, 0.02);
-			roundBoundaries.addBorderRadial(0, 0.25, 0, 0);
-			grafici.plot(barPlot, dataInterpolator, roundBoundaries);
+			Boundary boundary;
+			grafici.colorMap(*colorPlots[idx]);
+			boundary.cropGridCartesian(8, 1, idx).cropAbsoluteCartesian({ 0.01, 0.01 }, { 0.01, 0.01 });
+			grafici.plot(bar, x, y, x, opt, boundary);
 		}
 
 		gfx.flush();
 	}
 
 	{
-		DataSetFloat dataset;
-		DataSetInterpolator dataInterpolator;
-		DataSetSpline dataSpline;
-		DataSetHistogram dataHist;
-		/* == INTERPOLATION == */
-		//float dataArrayValue[11] = {0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2};
-		float dataArrayY[13] = { 0, 5, 10, 10, 0, 0, -10, -10, 0, 0, 10, 0, 0 };
+		/* shared axis */
+		File_GFX gfx(640, 480, "imgs/shared_axis.bmp");
 
-		Adafruit_GFX *gfx = new File_GFX(1024, 768, "interpolation.bmp");
+		constexpr size_t num_elem = 5;
+		float array_y1[num_elem] = { 1, 2, 3, 4, 5 };
+		float array_y2[num_elem] = { 2, 3, 4, 5, 6 };
+		float array_x1[num_elem] = { 2, 3, 4, 5, 6 };
+		float array_x2[num_elem] = { 0, 1, 2, 3, 4 };
+		Linear xAxis(7);
+		Linear yAxis(6, -1, 1);
+		ArrayFloat y1(array_y1, num_elem);
+		ArrayFloat y2(array_y2, num_elem);
+		ArrayFloat x1(array_x1, num_elem);
+		ArrayFloat x2(array_x2, num_elem);
 
-		grafici.begin(*gfx);
-
-		grafici.style.colorPalette = &csBright;
-		grafici.style.colorSource = ColorSource::computeFromX;
-
-		dataset.begin(dataArrayY, dataArrayY, 13);
-		dataInterpolator.begin(dataset, 100);
-		dataSpline.begin(dataset, 100);
-
-		grafici.clear();
-		barPlot.thickness = 0.0;
-
-		grafici.boundaries.subBoundaries(1, 3, 0);
-		grafici.boundaries.addBorder(0.04, 0.04, 0.04, 0.02);
-		grafici.plot(axisPlot, dataset);
-		grafici.plot(linePlot, dataset);
-		grafici.plot(barPlot, dataset);
-
-		grafici.boundaries.fullScreen();
-		grafici.boundaries.subBoundaries(1, 3, 1);
-		grafici.boundaries.addBorder(0.04, 0.04, 0.02, 0.02);
-		grafici.plot(axisPlot, dataInterpolator);
-		grafici.plot(linePlot, dataInterpolator);
-		grafici.plot(barPlot, dataInterpolator);
-
-		grafici.boundaries.fullScreen();
-		grafici.boundaries.subBoundaries(1, 3, 2);
-		grafici.boundaries.addBorder(0.04, 0.04, 0.02, 0.04);
-		grafici.plot(axisPlot, dataSpline);
-		grafici.plot(linePlot, dataSpline);
-		grafici.plot(barPlot, dataSpline);
-
-		//flush to file
-		((File_GFX *)gfx)->flush();
-	}
-
-	{
-		DataSetFloat dataset;
-		DataSetInterpolator dataInterpolator;
-		DataSetSpline dataSpline;
-		DataSetHistogram dataHist;
-		/* == COLOR SCHEMES == */
-		float dataArrayY[11] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-		Adafruit_GFX *gfx = new File_GFX(1024, 768, "color_schemes.bmp");
-
-		grafici.begin(*gfx);
-		grafici.style.colorSource = ColorSource::computeFromX;
-
-		// dataset - we provide the same array for Y and values so that the color encodes the bar height
-		dataset.begin(dataArrayY, dataArrayY, 11);
-		dataSpline.begin(dataset, 20);
-
-		ColorSet colorPalettes[6] = { csRainbow, csBright, csFrance, csCmyk, csHeat, csBw };
-
-		barPlot.thickness = 0.9;
-
-		for (int i = 0; i < 6; i++)
-		{
-			Boundaries boundaries;
-			grafici.style.colorPalette = &(colorPalettes[i]);
-
-			boundaries.subBoundaries(2, 3, i);
-			grafici.clear(boundaries);
-
-			boundaries.addBorder(0.02, 0.02, 0.02, 0.02);
-			grafici.plot(barPlot, dataSpline, boundaries);
-		}
-
-		//flush to file
-		((File_GFX *)gfx)->flush();
-	}
-
-	{
-		DataSetFloat dataset;
-		DataSetInterpolator dataInterpolator;
-		DataSetSpline dataSpline;
-		DataSetHistogram dataHist;
-		/* == PLOT STYLES == */
-		float dataArrayY[11] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 };
-
-		Adafruit_GFX *gfx = new File_GFX(1024, 768, "plot_types.bmp");
-
-		grafici.begin(*gfx);
-		grafici.style.colorSource = ColorSource::computeFromY;
-		grafici.style.colorPalette = &csCmyk;
+		grafici.begin(gfx);
 		grafici.clear();
 
-		// dataset - we provide the same array for Y and values so that the color encodes the bar height
-		dataset.begin(dataArrayY, 1.0, 11);
-		dataSpline.begin(dataset, 20);
+		/* set each limit as the union (using + sign) of all the limits*/
+		x1.limits() = x2.limits() = xAxis.limits() = (x1.limits() + x2.limits() + xAxis.limits());
+		y1.limits() = y2.limits() = yAxis.limits() = (y1.limits() + y2.limits() + yAxis.limits());
 
-		Plotter *plots[6] = { &barcodePlot, &barPlot, &linePlot, &scatterPlot, &linePlot, &linePlot };
+		grafici.colorMap(Colors::blackAndWhite);
+		grafici.plot(axis, xAxis, yAxis, Constant(8, 0.1));
+		grafici.colorMap(Colors::semaphore);
+		grafici.plot(line, x1, y1, y1);
+		grafici.plot(line, x2, y2, y2);
 
-		barPlot.thickness = 0.9;
-
-		for (int i = 0; i < 6; i++)
-		{
-			Boundaries boundaries;
-			boundaries.subBoundaries(2, 3, i);
-			boundaries.addBorder(0.02, 0.02, 0.02, 0.02);
-
-			grafici.plot(*plots[i], dataSpline, boundaries);
-		}
-
-		//flush to file
-		((File_GFX *)gfx)->flush();
+		gfx.flush();
 	}
 
 	return 0;
