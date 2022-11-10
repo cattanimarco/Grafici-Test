@@ -107,7 +107,7 @@
 #	include <math.h>
 #endif
 
-// memcpy() and memset() substitutes
+// memcpy and memset() substitutes
 #if defined( EZD_NO_MEMCPY )
 #	define EZD_MEMCPY ezd_memcpy
 #	define EZD_MEMSET ezd_memset

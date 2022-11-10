@@ -1,6 +1,9 @@
-CCSRC = $(wildcard *.cpp) \
-	$(wildcard Grafici-GFX/src/*.cpp) \
-	$(wildcard Grafici-GFX/src/modules/*.cpp) \
+CCSRC = $(wildcard *.cpp)                     \
+	# $(wildcard Grafici-GFX/src/*.cpp)         \
+	# $(wildcard Grafici-GFX/src/colors/*.cpp)  \
+	# $(wildcard Grafici-GFX/src/plotter/*.cpp) \
+	# $(wildcard Grafici-GFX/src/data/*.cpp)    \
+	# $(wildcard Grafici-GFX/src/display/*.cpp) \
 
 OBJ = $(CCSRC:.cpp=.o)
 
@@ -9,15 +12,17 @@ CXXFLAGS=-g -std=c++11 -Wall -Wpedantic -Wunused -Wextra -I.
 lib:
 	gcc -O -c ezdib.c
 
-test: $(OBJ) ezdib.o
+unit: $(OBJ) ezdib.o
 	$(CXX) -o $@ $^ 
 	
-run: lib test
-	@./test
+run: all
+	@./unit
+
+all: clean lib unit
 
 .PHONY: clean
 
 clean:
-	rm -f $(OBJ) ezdib.o test
-	#rm -f imgs/*.bmp 
-
+	rm -f $(OBJ) ezdib.o unit
+	rm -f imgs/unit/*.bmp 
+	rm -f imgs/examples/*.bmp 

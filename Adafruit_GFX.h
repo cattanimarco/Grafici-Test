@@ -75,11 +75,11 @@ class Adafruit_GFX  {
     WIDTH,          ///< This is the 'raw' display width - never changes
     HEIGHT;         ///< This is the 'raw' display height - never changes
   int16_t
-    _width,         ///< Display width as modified by current rotation
-    _height;        ///< Display height as modified by current rotation
+    _width,         ///< DisplayDriver width as modified by current rotation
+    _height;        ///< DisplayDriver height as modified by current rotation
 
   uint8_t
-    rotation;       ///< Display rotation (0 thru 3)
+    rotation;       ///< DisplayDriver rotation (0 thru 3)
 };
 
 
