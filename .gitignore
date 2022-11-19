@@ -1,5 +1,5 @@
 *.o
-test
-Grafici.*
-vscode.*
-.vscode/*
+**/.*
+!/Grafici-GFX
+!/imgs
+unit
