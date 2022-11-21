@@ -10,6 +10,9 @@
 
 #include "Grafici-GFX/src/Grafici.h"
 
+std::ostream& operator<<(std::ostream& os, half h) { os << (float)h; return os;}
+std::istream& operator>>(std::istream& is, half& h) { float f; is >> f; h = f; return is;}
+
 /* check https://randomascii.wordpress.com/2012/02/25/comparing-halfing-point-numbers-2012-edition/ */
 #define assert_half(a, b)                                    \
 	do                                                        \

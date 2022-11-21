@@ -20,6 +20,13 @@ run: all
 
 all: clean lib unit
 
+doxygen:
+	doxygen doxyfile
+
+docs: doxygen
+	moxygen --output Grafici-Wiki/Documentation.md ./xml
+	rm -rf xml
+
 .PHONY: clean
 
 clean:

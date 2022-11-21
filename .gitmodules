@@ -1,3 +1,6 @@
 [submodule "Grafici-GFX"]
 	path = Grafici-GFX
 	url = git@github.com:cattanimarco/Grafici-GFX.git
+[submodule "Grafici-Wiki"]
+	path = Grafici-Wiki
+	url = https://github.com/cattanimarco/Grafici-GFX.wiki.git

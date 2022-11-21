@@ -1,0 +1,12 @@
+# Doxyfile 1.9.5
+
+PROJECT_NAME           = Grafici
+PROJECT_NUMBER         = 3
+OUTPUT_DIRECTORY       = "./"
+INPUT                  = "./Grafici-GFX/src"
+RECURSIVE              = YES
+SOURCE_BROWSER         = YES
+GENERATE_HTML          = NO
+GENERATE_LATEX         = NO
+GENERATE_XML           = YES
+CLASS_GRAPH            = NO
