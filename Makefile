@@ -24,7 +24,7 @@ doxygen:
 	doxygen doxyfile
 
 docs: doxygen
-	moxygen --output Grafici-Wiki/Documentation.md ./xml
+	moxygen -H --groups --output Grafici-Wiki/Api-%s.md ./xml
 	rm -rf xml
 
 .PHONY: clean
