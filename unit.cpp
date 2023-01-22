@@ -10,11 +10,8 @@
 
 #include "Grafici-GFX/src/Grafici.h"
 
-std::ostream& operator<<(std::ostream& os, half h) { os << (float)h; return os;}
-std::istream& operator>>(std::istream& is, half& h) { float f; is >> f; h = f; return is;}
-
-/* check https://randomascii.wordpress.com/2012/02/25/comparing-halfing-point-numbers-2012-edition/ */
-#define assert_half(a, b)                                    \
+/* check https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/ */
+#define assert_float(a, b)                                    \
 	do                                                        \
 	{                                                         \
 		if (fabs(float(b) - float(a)) > 0.02)                            \
@@ -51,80 +48,80 @@ int main()
 {
 	/* == Test Range == */
 	Range<int> r{ 0, 10 };
-	assert_half(r.low, 0);
-	assert_half(r.high, 10);
+	assert_float(r.low, 0);
+	assert_float(r.high, 10);
 
 	/* == Test DataNorm == */
 	DataNorm nf0{ 0.0, { 0.0, 10.0 } };
-	assert_half(nf0.raw(), 0.0);
-	assert_half(nf0.norm(), 0.0);
+	assert_float(nf0.raw(), 0.0);
+	assert_float(nf0.norm(), 0.0);
 
 	DataNorm nf5{ 5, { 0, 10 } };
-	assert_half(nf5.raw(), 5);
-	assert_half(nf5.norm(), 0.5);
+	assert_float(nf5.raw(), 5);
+	assert_float(nf5.norm(), 0.5);
 
 	DataNorm nf10{ 10, { 0, 10 } };
-	assert_half(nf10.raw(), 10);
-	assert_half(nf10.norm(), 1);
+	assert_float(nf10.raw(), 10);
+	assert_float(nf10.norm(), 1);
 
 	/* == Test DataArray == */
 	int array_int[5] = { 0, -1, -2, -3, -4 };
 	DataArray<int> data_array_int(array_int, 5);
-	assert_half(data_array_int[0].raw(), 0);
-	assert_half(data_array_int[0].norm(), 1);
-	assert_half(data_array_int[2].raw(), -2);
-	assert_half(data_array_int[2].norm(), 0.5);
-	assert_half(data_array_int[4].raw(), -4);
-	assert_half(data_array_int[4].norm(), 0);
+	assert_float(data_array_int[0].raw(), 0);
+	assert_float(data_array_int[0].norm(), 1);
+	assert_float(data_array_int[2].raw(), -2);
+	assert_float(data_array_int[2].norm(), 0.5);
+	assert_float(data_array_int[4].raw(), -4);
+	assert_float(data_array_int[4].norm(), 0);
 
-	float_type array_half[5] = { 0, -1, -2, -3, -4 };
-	DataArray<float_type> data_array_half(array_half, 5);
-	assert_half(data_array_half[0].raw(), 0);
-	assert_half(data_array_half[0].norm(), 1);
-	assert_half(data_array_half[2].raw(), -2);
-	assert_half(data_array_half[2].norm(), 0.5);
-	assert_half(data_array_half[4].raw(), -4);
-	assert_half(data_array_half[4].norm(), 0);
+	float array_float[5] = { 0, -1, -2, -3, -4 };
+	DataArray<float> data_array_float(array_float, 5);
+	assert_float(data_array_float[0].raw(), 0);
+	assert_float(data_array_float[0].norm(), 1);
+	assert_float(data_array_float[2].raw(), -2);
+	assert_float(data_array_float[2].norm(), 0.5);
+	assert_float(data_array_float[4].raw(), -4);
+	assert_float(data_array_float[4].norm(), 0);
 
 	/* == Test DataLinear == */
 	DataLinear data_linear1{ 11 };
 	for (size_t idx = 0; idx < data_linear1.size(); ++idx)
 	{
-		assert_half(data_linear1[idx].raw(), static_cast<float_type>(idx));
-		assert_half(data_linear1[idx].norm(), idx * 0.1);
+		assert_float(data_linear1[idx].raw(), static_cast<float>(idx));
+		assert_float(data_linear1[idx].norm(), idx * 0.1);
 	}
 
 	/* y = 3x+1 with x in [0,10] */
 	DataLinear data_linear2{ 11, 1, 3 };
 	for (size_t idx = 0; idx < data_linear2.size(); ++idx)
 	{
-		assert_half(data_linear2[idx].raw(), idx * 3.0 + 1);
-		assert_half(data_linear2[idx].norm(), idx * 0.1);
+		assert_float(data_linear2[idx].raw(), idx * 3.0 + 1);
+		assert_float(data_linear2[idx].norm(), idx * 0.1);
 	}
 
 	/* == Test DataFunction == */
-	DataFunction data_function_sin{ 11, [](size_t idx) -> float_type
+	DataFunction data_function_sin{ 11, [](size_t idx) -> float
 		                            { return sin(M_PI * idx / 20.0); } };
 	for (size_t idx = 0; idx < data_function_sin.size(); ++idx)
 	{
-		assert_half(data_function_sin[idx].raw(), sin(M_PI * idx / 20.0));
+		assert_float(data_function_sin[idx].raw(), sin(M_PI * idx / 20.0));
 		/* the raw function goes from 0 to 1, hence raw() == norm() */
-		assert_half(data_function_sin[idx].norm(), sin(M_PI * idx / 20.0));
+		assert_float(data_function_sin[idx].norm(), sin(M_PI * idx / 20.0));
 	}
 
 	/* == Test DataConstant == */
-	DataConstant data_constant1{ 10, (float_type)0.7 };
+	DataConstant data_constant1{ 10, (float)0.7 };
 	for (size_t idx = 0; idx < data_constant1.size(); ++idx)
 	{
-		assert_half(data_constant1[idx].raw(), 0.7);
-		assert_half(data_constant1[idx].norm(), 0.7);
+		assert_float(data_constant1[idx].raw(), 0.7);
+		assert_float(data_constant1[idx].norm(), 0.7);
 	}
 
 	DataConstant data_constant2{ 10, { 7, { 0, 10 } } };
 	for (size_t idx = 0; idx < data_constant2.size(); ++idx)
 	{
-		assert_half(data_constant2[idx].raw(), 7);
-		assert_half(data_constant2[idx].norm(), 0.7);
+		assert_float(data_constant2[idx].raw(), 7);
+		assert_float(data_constant2[idx].norm(), 0.7);
 	}
 
 	/* == Test DataLinear == */
@@ -133,23 +130,23 @@ int main()
 	DataInterpolatorL linear_interpolator{ data_linear_x, data_linear_y, 110 };
 	for (size_t idx = 0; idx < linear_interpolator.size(); ++idx)
 	{
-		assert_half(linear_interpolator.x()[idx].raw(), idx * (1.0 / 11));
-		assert_half(linear_interpolator.x()[idx].norm(), idx * (1.0 / 110));
-		assert_half(linear_interpolator.y()[idx].raw(), idx * (2.0 / 11));
-		assert_half(linear_interpolator.y()[idx].norm(), idx * (1.0 / 110));
+		assert_float(linear_interpolator.x()[idx].raw(), idx * (1.0 / 11));
+		assert_float(linear_interpolator.x()[idx].norm(), idx * (1.0 / 110));
+		assert_float(linear_interpolator.y()[idx].raw(), idx * (2.0 / 11));
+		assert_float(linear_interpolator.y()[idx].norm(), idx * (1.0 / 110));
 	}
 
 	/* == Test DataFunction == */
 
 	/* clang-format off */
-	DataFunction data_function_zig_zag{ 11, [](size_t idx) -> float_type { return acos(cos(idx)); } };
+	DataFunction data_function_zig_zag{ 11, [](size_t idx) -> float { return acos(cos(idx)); } };
 	/* clang-format on */
 
 	DataSpline<110> spline_interpolator{ data_linear_x, data_function_zig_zag };
 	for (size_t idx = 0; idx < spline_interpolator.size(); ++idx)
 	{
-		assert_half(spline_interpolator.x()[idx].raw(), idx * (1.0 / 11));
-		assert_half(spline_interpolator.x()[idx].norm(), idx * (1.0 / 110));
+		assert_float(spline_interpolator.x()[idx].raw(), idx * (1.0 / 11));
+		assert_float(spline_interpolator.x()[idx].norm(), idx * (1.0 / 110));
 		/* we cannot test y */
 	}
 
@@ -161,10 +158,10 @@ int main()
 	DataHistogramXY<11> histogram_1{ data_linear1 };
 	for (size_t idx = 0; idx < histogram_1.size(); ++idx)
 	{
-		assert_half(histogram_1.x()[idx].raw(), idx * class_num + class_id + 0.5);
-		assert_half(histogram_1.x()[idx].norm(), (idx * class_num + class_id + 0.5) / (histogram_1.size() * class_num));
-		assert_half(histogram_1.y()[idx].raw(), 1);
-		assert_half(histogram_1.y()[idx].norm(), 1);
+		assert_float(histogram_1.x()[idx].raw(), idx * class_num + class_id + 0.5);
+		assert_float(histogram_1.x()[idx].norm(), (idx * class_num + class_id + 0.5) / (histogram_1.size() * class_num));
+		assert_float(histogram_1.y()[idx].raw(), 1);
+		assert_float(histogram_1.y()[idx].norm(), 1);
 	}
 
 	/* Test histogram when values are spread one per bin, but with space for multiple classes on the x axis */
@@ -173,18 +170,18 @@ int main()
 	DataHistogramXY<11> histogram_2{ data_linear1, false, class_id, class_num };
 	for (size_t idx = 0; idx < histogram_1.size(); ++idx)
 	{
-		assert_half(histogram_2.x()[idx].raw(), idx * class_num + class_id + 0.5);
-		assert_half(histogram_2.x()[idx].norm(), (idx * class_num + class_id + 0.5) / (histogram_1.size() * class_num));
-		assert_half(histogram_2.y()[idx].raw(), 1);
-		assert_half(histogram_2.y()[idx].norm(), 1);
+		assert_float(histogram_2.x()[idx].raw(), idx * class_num + class_id + 0.5);
+		assert_float(histogram_2.x()[idx].norm(), (idx * class_num + class_id + 0.5) / (histogram_1.size() * class_num));
+		assert_float(histogram_2.y()[idx].raw(), 1);
+		assert_float(histogram_2.y()[idx].norm(), 1);
 	}
 
 	/* Test histogram when all values are inside one bin */
 	DataHistogramXY<10> histogram_3{ data_constant1 };
 	for (size_t idx = 0; idx < histogram_3.size(); ++idx)
 	{
-		float_type acc = (idx == 7) ? histogram_3.size() : 0;
-		assert_half(histogram_3.y()[idx].raw(), acc);
+		float acc = (idx == 7) ? histogram_3.size() : 0;
+		assert_float(histogram_3.y()[idx].raw(), acc);
 	}
 
 	/* == Test Color == */
@@ -192,16 +189,16 @@ int main()
 	Color color_1{ 0, 0, 255 };
 	Color color_2{ 255, 0, 0 };
 	Color color_3 = color_1 + color_2;
-	assert_half(color_1.red, 0);
-	assert_half(color_1.green, 0);
-	assert_half(color_1.blue, 255);
-	assert_half(color_3.red, 255);
-	assert_half(color_3.green, 0);
-	assert_half(color_3.blue, 255);
+	assert_float(color_1.red, 0);
+	assert_float(color_1.green, 0);
+	assert_float(color_1.blue, 255);
+	assert_float(color_3.red, 255);
+	assert_float(color_3.green, 0);
+	assert_float(color_3.blue, 255);
 	color_2 = color_2 * 0.5;
-	assert_half(color_2.red, 127);
-	assert_half(color_2.green, 0);
-	assert_half(color_2.blue, 0);
+	assert_float(color_2.red, 127);
+	assert_float(color_2.green, 0);
+	assert_float(color_2.blue, 0);
 	assert(color_1.to_R5G6B5() == 31);
 
 	/* == Test DisplayVector == */
@@ -210,42 +207,42 @@ int main()
 	DisplayVector b{ 1, 1 };
 	a = a + b;
 	a.y = a.y - 0.1;
-	assert_half(a.y, 1.9);
-	assert_half(a.x, 1);
-	assert_half(b.y, 1);
-	assert_half(b.x, 1);
+	assert_float(a.y, 1.9);
+	assert_float(a.x, 1);
+	assert_float(b.y, 1);
+	assert_float(b.x, 1);
 	b = a - b;
-	assert_half(a.y, 1.9);
-	assert_half(a.x, 1);
-	assert_half(b.y, 0.9);
-	assert_half(b.x, 0);
+	assert_float(a.y, 1.9);
+	assert_float(a.x, 1);
+	assert_float(b.y, 0.9);
+	assert_float(b.x, 0);
 	b = b * 0.5;
-	assert_half(b.y, 0.45);
-	assert_half(b.x, 0);
+	assert_float(b.y, 0.45);
+	assert_float(b.x, 0);
 
 	/* == Test Window == */
 
 	Window win{ { 0.25, 1 }, { 0, 0.75 } };
 
 	auto res = win.data_to_display_vector(0, 0);
-	assert_half(res.x, 0.25);
-	assert_half(res.y, 0.0);
+	assert_float(res.x, 0.25);
+	assert_float(res.y, 0.0);
 
 	auto res2 = win.data_to_display_vector(1, 1);
-	assert_half(res2.x, 1.0);
-	assert_half(res2.y, 0.75);
+	assert_float(res2.x, 1.0);
+	assert_float(res2.y, 0.75);
 
 	auto res3 = win.origin();
-	assert_half(res3.x, 0.25);
-	assert_half(res3.y, 0);
+	assert_float(res3.x, 0.25);
+	assert_float(res3.y, 0);
 
 	auto res4 = win.sub_window(3, 3, 1, 2).origin();
-	assert_half(res4.x, 0.5);
-	assert_half(res4.y, 0.5);
+	assert_float(res4.x, 0.5);
+	assert_float(res4.y, 0.5);
 
 	auto res5 = win.sub_window(3, 3, 1, 2).sub_window(5, 5, 4, 4).origin();
-	assert_half(res5.x, 0.7);
-	assert_half(res5.y, 0.7);
+	assert_float(res5.x, 0.7);
+	assert_float(res5.y, 0.7);
 
 	{
 		File_GFX gfx(640, 480, "imgs/unit/rectangles_window.bmp");
@@ -291,8 +288,8 @@ int main()
 
 		for (size_t idx = 8; idx > 2; --idx)
 		{
-			const float_type x_radius = 0.5 * (480.0 / 640.0) * (idx / 8.0);
-			const float_type y_radius = 0.5 * (idx / 8.0);
+			const float x_radius = 0.5 * (480.0 / 640.0) * (idx / 8.0);
+			const float y_radius = 0.5 * (idx / 8.0);
 			display_driver.fill_polygon({ .5, .5 }, { x_radius, y_radius }, idx, .25, parula.index_to_color(idx));
 			display_driver.draw_polygon({ .5, .5 }, { x_radius, y_radius }, idx, .75, parula.index_to_color(idx + 3));
 		}
@@ -307,14 +304,14 @@ int main()
 
 		for (size_t idx = 0; idx < num_rays; ++idx)
 		{
-			float_type norm_idx = loop_range.value_to_norm(idx);
+			float norm_idx = loop_range.value_to_norm(idx);
 			display_driver.fill_rect({ 0.3, norm_idx }, { 0.7, 1 }, rainbow.norm_to_color({ norm_idx, { 0, 1 } }), polar_window.sub_polar_window({ 0, .5 }, { .3, 1 }).sub_polar_window(num_rays, 1, idx, 0));
 			display_driver.draw_rect({ 0.3, 0 }, { 0.7, norm_idx }, rainbow.norm_to_color({ 1 - norm_idx, { 0, 1 } }), polar_window.sub_polar_window({ 0, .5 }, { .3, 1 }).sub_polar_window(num_rays, 1, idx, 0));
 		}
 
 		for (size_t idx = 0; idx < num_rays; ++idx)
 		{
-			float_type norm_idx = loop_range.value_to_norm(idx);
+			float norm_idx = loop_range.value_to_norm(idx);
 			display_driver.fill_rect({ 0.3, norm_idx }, { 0.7, 1 }, parula.norm_to_color({ norm_idx, { 0, 1 } }), polar_window.sub_polar_window({ .5, 1 }, { .3, 1 }).sub_polar_window(num_rays, 1, idx, 0));
 			display_driver.draw_rect({ 0.3, 0 }, { 0.7, norm_idx }, parula.norm_to_color({ 1 - norm_idx, { 0, 1 } }), polar_window.sub_polar_window({ .5, 1 }, { .3, 1 }).sub_polar_window(num_rays, 1, idx, 0));
 		}
@@ -322,15 +319,15 @@ int main()
 
 	{
 		/* Define a set of nice to plot functions */
-		DataFunction data_y_sin(360, [](size_t idx) -> float_type
+		DataFunction data_y_sin(360, [](size_t idx) -> float
 		                        { return sin(idx / 30.0 * M_PI); });
-		DataFunction data_y_zig_zag(360, [](size_t idx) -> float_type
+		DataFunction data_y_zig_zag(360, [](size_t idx) -> float
 		                            { return acos(cos(idx / 30.0 * M_PI)); });
-		DataFunction data_y_square(360, [](size_t idx) -> float_type
+		DataFunction data_y_square(360, [](size_t idx) -> float
 		                           { return ((idx / 30) % 2 == 0) ? 0 : 1; });
-		DataFunction data_y_pixel_sin(360, [](size_t idx) -> float_type
+		DataFunction data_y_pixel_sin(360, [](size_t idx) -> float
 		                              { return round(2 * sin(idx / 30.0 * M_PI)); });
-		DataFunction data_y_beat(360, [](size_t idx) -> float_type
+		DataFunction data_y_beat(360, [](size_t idx) -> float
 		                         { return idx % 17 == 0 ? 0 : (idx % 23 == 0 ? 1 : .5); });
 
 		/* resize data sources from 0,1 range to custom range */
@@ -377,7 +374,7 @@ int main()
 
 	{
 		DataLinear data_x{ 10, { 0, 11 }, 1, 1 };
-		DataConstant data_size{ 10, (float_type)0.04 };
+		DataConstant data_size{ 10, (float)0.04 };
 
 		std::string markers = "eps>^*x+o.";
 		Range<size_t> rows = { 0, markers.size() + 1 };
@@ -415,7 +412,7 @@ int main()
 
 		/* clang-format off */
 		DataResize data_x(DataLinear(10), { 0.5 / 11, 10.5 / 11 });
-		DataFunction data_y(10, [](size_t idx) -> float_type { return pow(idx, 2); });
+		DataFunction data_y(10, [](size_t idx) -> float { return pow(idx, 2); });
 		/* clang-format on */
 
 		Grafici plot{ gfx };
@@ -442,7 +439,7 @@ int main()
 
 		/* clang-format off */
 		DataResize data_x(DataLinear(10), { 0.5 / 11, 10.5 / 11 });
-		DataFunction data_y(10, [](size_t idx) -> float_type{ return pow(idx, 2); });
+		DataFunction data_y(10, [](size_t idx) -> float{ return pow(idx, 2); });
 		/* clang-format on */
 
 		Grafici plot{ gfx };
@@ -497,7 +494,7 @@ int main()
 		Grafici plot{ gfx };
 
 		DataLinear data_x{ 100 };
-		DataFunction data_y{ 100, [](size_t idx) -> float_type
+		DataFunction data_y{ 100, [](size_t idx) -> float
 			                 { return sin(M_PI * idx * 0.05); } };
 
 		plot.set_color_map(parula);
@@ -518,15 +515,15 @@ int main()
 
 		plot.set_axis({ HISTOGRAM_BINS, 1, h_lines, white * 0.5 });
 
-		float_type raw_data[ARRAY_SIZE];
+		float raw_data[ARRAY_SIZE];
 
 		randomSeed(66);
 		for (size_t i = 0; i < ARRAY_SIZE; ++i)
 		{
-			raw_data[i] = sqrt(-2 * log(float((random(HISTOGRAM_BINS) + 1) / (float_type)HISTOGRAM_BINS))) * sin(M_PI * 2.0 * random(HISTOGRAM_BINS) / (float_type)HISTOGRAM_BINS);
+			raw_data[i] = sqrt(-2 * log(float((random(HISTOGRAM_BINS) + 1) / (float)HISTOGRAM_BINS))) * sin(M_PI * 2.0 * random(HISTOGRAM_BINS) / (float)HISTOGRAM_BINS);
 		}
 
-		DataArrayXY<float_type> data{ raw_data, ARRAY_SIZE };
+		DataArrayXY<float> data{ raw_data, ARRAY_SIZE };
 
 		PlotLineOpts left_opts;
 		left_opts.segments = 10;
@@ -578,5 +575,18 @@ int main()
 
 		/* Plot data as a line. Color line using `data_y` */
 		plot.line(data_interpolated.x(), data_interpolated.y(), data_interpolated.y(), full_screen);
+	}
+
+	{
+		File_GFX gfx(240, 320, "imgs/wiki/window.bmp");
+	
+		DisplayDriver display_driver(gfx);
+
+		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
+
+		Window display_window{ { .5, 1 }, {0, .5 } };
+		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
+		display_driver.fill_rect({ .25, .25 }, { .75, .75 }, blue, display_window);
+
 	}
 }
