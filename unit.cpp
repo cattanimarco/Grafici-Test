@@ -578,7 +578,18 @@ int main()
 	}
 
 	{
-		File_GFX gfx(240, 320, "imgs/wiki/window.bmp");
+		File_GFX gfx(240, 240, "imgs/wiki/window.bmp");
+	
+		DisplayDriver display_driver(gfx);
+
+		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
+
+		Window display_window{ { .5, 1 }, {0, .5 } };
+		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
+	}
+
+	{
+		File_GFX gfx(240, 240, "imgs/wiki/window2.bmp");
 	
 		DisplayDriver display_driver(gfx);
 
@@ -587,6 +598,17 @@ int main()
 		Window display_window{ { .5, 1 }, {0, .5 } };
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
 		display_driver.fill_rect({ .25, .25 }, { .75, .75 }, blue, display_window);
+	}
 
+	{
+		File_GFX gfx(240, 240, "imgs/wiki/window3.bmp");
+	
+		DisplayDriver display_driver(gfx);
+
+		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
+
+		Window display_window{ { .5, 1 }, {0, .5 } };
+		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
+		display_driver.fill_rect({ .25, .25 }, { .75, .75 }, blue, full_screen);
 	}
 }
