@@ -611,4 +611,18 @@ int main()
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
 		display_driver.fill_rect({ .25, .25 }, { .75, .75 }, blue, full_screen);
 	}
+
+	{
+		File_GFX gfx(240, 320, "imgs/wiki/gartner_hype_cycle.bmp");
+		Grafici plot{ gfx };
+
+		int hype_raw[] = {0, 100, 20, 50,  60, 60 , 60 };
+
+		DataArrayXY<int> hype{ hype_raw, 7 };
+		DataSpline<30> interpolated_hype_cycle{hype.x(),hype.y()};
+
+		/* Plot data as a line. Color line using `data_y` */
+		plot.line(interpolated_hype_cycle.x(), interpolated_hype_cycle.y(), interpolated_hype_cycle.y());
+	}
+
 }
