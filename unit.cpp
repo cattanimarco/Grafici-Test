@@ -1,4 +1,6 @@
+#include "assert.h"
 #include <cmath>
+#include <cstring>
 #include <iostream>
 #include <string>
 
@@ -7,18 +9,17 @@
 #define random(i) (rand() % i)
 
 #include "File_GFX.h"
-
 #include "Grafici-GFX/src/Grafici.h"
 
 /* check https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/ */
 #define assert_float(a, b)                                    \
 	do                                                        \
 	{                                                         \
-		if (fabs(float(b) - float(a)) > 0.02)                            \
+		if (fabs(float(b) - float(a)) > 0.02)                 \
 		{                                                     \
 			std::cout << std::endl                            \
 			          << "Error on line " << __LINE__ << ": " \
-			          << float(a) << " != " << float(b)                     \
+			          << float(a) << " != " << float(b)       \
 			          << "( " << #a << " , " << #b << " )"    \
 			          << std::endl                            \
 			          << std::endl;                           \
@@ -343,10 +344,8 @@ int main()
 			File_GFX gfx(640, 640, "imgs/unit/plot_line.bmp");
 			DisplayDriver display_driver(gfx);
 
-			PlotLineOpts options;
-			options.draw_background = false;
-			options.segments = 45;
-			plot_axis(display_driver, full_screen, { 10, 10, v_lines | h_lines, white * 0.3 });
+			auto options = plot_options.set_axis(10, 10, silver).segments(45);
+
 			plot_line(display_driver, full_screen, rainbow, data_x, data_y_1, data_y_1, options);
 			plot_line(display_driver, full_screen, rainbow, data_x, data_y_2, data_y_2, options);
 			plot_line(display_driver, full_screen, rainbow, data_x, data_y_3, data_y_3, options);
@@ -360,10 +359,8 @@ int main()
 
 			PolarWindow polar_window{ { 0, 1 }, { 0, 1 }, full_screen };
 
-			PlotLineOpts options;
-			options.draw_background = false;
-			options.segments = 45;
-			plot_axis(display_driver, polar_window, { 10, 10, v_lines | h_lines, white * 0.3, 45 });
+			auto options = plot_options.set_axis(10, 10, silver).segments(45);
+
 			plot_line(display_driver, polar_window, rainbow, data_x, data_y_1, data_y_1, options);
 			plot_line(display_driver, polar_window, rainbow, data_x, data_y_2, data_y_2, options);
 			plot_line(display_driver, polar_window, rainbow, data_x, data_y_3, data_y_3, options);
@@ -388,7 +385,9 @@ int main()
 			for (size_t idx_marker = 0; idx_marker < markers.size(); ++idx_marker)
 			{
 				DataConstant data_y{ 10, rows.value_to_norm(idx_marker + 1) };
-				plot.scatter(data_x, data_y, data_x, data_size, full_screen, std::string(1, markers[idx_marker]));
+				PlotOptions options;
+				options.scatter_style(std::string(1, markers[idx_marker]));
+				plot.scatter(data_x, data_y, data_x, data_size, full_screen, options);
 			}
 		}
 
@@ -402,7 +401,9 @@ int main()
 			for (size_t idx_marker = 0; idx_marker < markers.size(); ++idx_marker)
 			{
 				DataConstant data_y{ 10, rows.value_to_norm(idx_marker + 1) };
-				plot.scatter(data_x, data_y, data_x, data_size, window, std::string(1, markers[idx_marker]));
+				PlotOptions options;
+				options.scatter_style(std::string(1, markers[idx_marker]));
+				plot.scatter(data_x, data_y, data_x, data_size, window, options);
 			}
 		}
 	}
@@ -418,8 +419,8 @@ int main()
 		Grafici plot{ gfx };
 		plot.set_color_map(parula);
 
-		PlotBarOpts opts;
-		opts.thickness = 0.5;
+		PlotOptions opts;
+		opts.thickness(0.5);
 
 		auto window1 = full_screen.sub_window({ 0, .5 }, { 0, .5 }).transform(WindowTransform::none);
 		plot.bar(data_x, data_y, data_y, window1, opts);
@@ -444,10 +445,10 @@ int main()
 
 		Grafici plot{ gfx };
 		plot.set_color_map(parula);
-		plot.set_axis({ 10, 10, h_lines | v_lines, white * 0.5 });
 
-		PlotBarOpts opts;
-		opts.thickness = 0.5;
+		PlotOptions opts;
+		opts.set_axis(10, 10, white * 0.5);
+		opts.thickness(0.5);
 
 		auto window1 = full_screen.sub_window({ 0, .5 }, { 0, .5 }).transform(WindowTransform::none);
 		plot.bar(data_x, data_y, data_y, window1, opts);
@@ -482,8 +483,8 @@ int main()
 		plot.set_color_map(parula);
 
 		/* break plot lines in multiple segments to create a gradient of colors between two data points */
-		PlotLineOpts opts;
-		opts.segments = 10;
+		PlotOptions opts;
+		opts.segments(10);
 
 		/* Plot data as a line. Color line using `data_y` */
 		plot.line(data.x(), data.y(), data.y(), full_screen, opts);
@@ -513,8 +514,6 @@ int main()
 
 		auto left_window = full_screen.sub_window({ 0, .74 }, { 0, 1 });
 
-		plot.set_axis({ HISTOGRAM_BINS, 1, h_lines, white * 0.5 });
-
 		float raw_data[ARRAY_SIZE];
 
 		randomSeed(66);
@@ -525,20 +524,20 @@ int main()
 
 		DataArrayXY<float> data{ raw_data, ARRAY_SIZE };
 
-		PlotLineOpts left_opts;
-		left_opts.segments = 10;
+		PlotOptions left_opts;
+		left_opts.segments(10);
+		left_opts.set_axis(HISTOGRAM_BINS, 1, white * 0.5);
 
 		plot.line(data.x(), data.y(), data.y(), left_window, left_opts);
 
 		auto right_window = full_screen.sub_window({ .76, 1 }, { 0, 1 }).transform(WindowTransform::ccw_90_rotation);
 
-		plot.set_axis({ 5, HISTOGRAM_BINS, h_lines | v_lines, white * 0.5 });
-
 		DataHistogramXY<HISTOGRAM_BINS> data_hist{ data.y() };
 
-		PlotBarOpts right_opts;
-		right_opts.fill_bars = true;
-		right_opts.thickness = 0.5;
+		PlotOptions right_opts;
+		right_opts.bar_filled(true);
+		right_opts.thickness(0.5);
+		right_opts.set_axis(5, HISTOGRAM_BINS, white * 0.5);
 
 		plot.bar(data_hist.x(), data_hist.y(), data_hist.x(), right_window, right_opts);
 	}
@@ -551,78 +550,112 @@ int main()
 		// File_GFX gfx(240, 320, "imgs/examples/multi_bar.bmp");
 	}
 
-	{
-		File_GFX gfx(240, 320, "imgs/examples/spline_from_array.bmp");
-		Grafici plot{ gfx };
+	// {
+	// 	File_GFX gfx(240, 320, "imgs/examples/spline_from_array.bmp");
+	// 	Grafici plot{ gfx };
 
-		constexpr size_t ARRAY_SIZE = 10;
-		constexpr size_t SPLINE_SIZE = 50;
-		constexpr size_t MAX_VALUE = 255;
+	// 	constexpr size_t ARRAY_SIZE = 10;
+	// 	constexpr size_t SPLINE_SIZE = 50;
+	// 	constexpr size_t MAX_VALUE = 255;
 
-		unsigned int raw_data[ARRAY_SIZE];
-		DataArrayXY<unsigned int> data{ raw_data, ARRAY_SIZE, { 0, MAX_VALUE } };
+	// 	unsigned int raw_data[ARRAY_SIZE];
+	// 	DataArrayXY<unsigned int> data{ raw_data, ARRAY_SIZE, { 0, MAX_VALUE } };
 
-		randomSeed(66);
-		for (size_t i = 0; i < ARRAY_SIZE; ++i)
-		{
-			raw_data[i] = random(MAX_VALUE + 1);
-		}
+	// 	randomSeed(66);
+	// 	for (size_t i = 0; i < ARRAY_SIZE; ++i)
+	// 	{
+	// 		raw_data[i] = random(MAX_VALUE + 1);
+	// 	}
 
-		/* Set the color map */
-		plot.set_color_map(parula);
+	// 	/* Set the color map */
+	// 	plot.set_color_map(parula);
 
-		DataSpline<SPLINE_SIZE> data_interpolated{data.x(),data.y()};
+	// 	DataSpline<SPLINE_SIZE> data_interpolated{ data.x(), data.y() };
 
-		/* Plot data as a line. Color line using `data_y` */
-		plot.line(data_interpolated.x(), data_interpolated.y(), data_interpolated.y(), full_screen);
-	}
+	// 	/* Plot data as a line. Color line using `data_y` */
+	// 	plot.line(data_interpolated.x(), data_interpolated.y(), data_interpolated.y(), full_screen);
+	// }
 
 	{
 		File_GFX gfx(240, 240, "imgs/wiki/window.bmp");
-	
+
 		DisplayDriver display_driver(gfx);
 
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
 
-		Window display_window{ { .5, 1 }, {0, .5 } };
+		Window display_window{ { .5, 1 }, { 0, .5 } };
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
 	}
 
 	{
 		File_GFX gfx(240, 240, "imgs/wiki/window2.bmp");
-	
+
 		DisplayDriver display_driver(gfx);
 
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
 
-		Window display_window{ { .5, 1 }, {0, .5 } };
+		Window display_window{ { .5, 1 }, { 0, .5 } };
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
 		display_driver.fill_rect({ .25, .25 }, { .75, .75 }, blue, display_window);
 	}
 
 	{
 		File_GFX gfx(240, 240, "imgs/wiki/window3.bmp");
-	
+
 		DisplayDriver display_driver(gfx);
 
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
 
-		Window display_window{ { .5, 1 }, {0, .5 } };
+		Window display_window{ { .5, 1 }, { 0, .5 } };
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, red, display_window);
 		display_driver.fill_rect({ .25, .25 }, { .75, .75 }, blue, full_screen);
 	}
 
+	// {
+	// 	File_GFX gfx(240, 320, "imgs/wiki/gartner_hype_cycle.bmp");
+	// 	Grafici plot{ gfx };
+
+	// 	int hype_raw[] = { 0, 100, 20, 50, 60, 60, 60 };
+
+	// 	DataArrayXY<int> hype{ hype_raw, 7 };
+	// 	DataSpline<30> interpolated_hype_cycle{ hype.x(), hype.y() };
+
+	// 	/* Plot data as a line. Color line using `data_y` */
+	// 	plot.line(interpolated_hype_cycle.x(), interpolated_hype_cycle.y(), interpolated_hype_cycle.y());
+	// }
+
 	{
-		File_GFX gfx(240, 320, "imgs/wiki/gartner_hype_cycle.bmp");
+		File_GFX gfx(1024, 768, "imgs/examples/scatter_and_histogram_from_distribution.bmp");
 		Grafici plot{ gfx };
 
-		int hype_raw[] = {0, 100, 20, 50,  60, 60 , 60 };
+		constexpr size_t data_size = 300;
+		constexpr size_t histogram_bins = 20;
 
-		DataArrayXY<int> hype{ hype_raw, 7 };
-		DataSpline<30> interpolated_hype_cycle{hype.x(),hype.y()};
+		// plot generated random data with normal distribution
+		DataLinear x(data_size);
+		DataDistributionNormal<data_size> y(84);
 
-		/* Plot data as a line. Color line using `data_y` */
-		plot.line(interpolated_hype_cycle.x(), interpolated_hype_cycle.y(), interpolated_hype_cycle.y());
+		plot.clear_screen();
+		plot.set_color_map(cmy);
+
+		// define a screen region between 0% and 74% of the total width and between 0% and 100% of the total height
+		auto left_window = full_screen.sub_window({ 0, .74 }, { 0, 1 });
+		auto left_opts = plot_options.set_axis(histogram_bins, 1, silver).segments(10).scatter_style("x");
+
+		// use constant fir the marker size
+		DataConstant s(data_size, 0.01);
+
+		// Scatter plot data. Color markers using y
+		plot.scatter(x, y, y, s, left_window, left_opts);
+
+		// define a screen region between 76% and 100% of the total width and between 0% and 100% of the total height
+		auto right_window = full_screen.sub_window({ .76, 1 }, { 0, 1 }).transform(WindowTransform::ccw_90_rotation);
+		auto right_opts = plot_options.set_axis(5, histogram_bins, silver).bar_filled(true).thickness(0.5);
+
+		// compute the histogram of y
+		DataHistogramXY<histogram_bins> data_hist{ y };
+
+		// plot histogram bars. Color the bars using y
+		plot.bar(data_hist.x(), data_hist.y(), data_hist.x(), right_window, right_opts);
 	}
-
 }

@@ -9,6 +9,7 @@
 
 #include <iostream>
 #define boolean bool
+#include "inttypes.h"
 
 /// Font data stored PER GLYPH
 typedef struct {
