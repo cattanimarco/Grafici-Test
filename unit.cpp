@@ -246,7 +246,7 @@ int main()
 	assert_float(res5.y, 0.7);
 
 	{
-		File_GFX gfx(640, 480, "imgs/unit/rectangles_window.bmp");
+		File_GFX gfx(640, 480, "imgs/unit/rectangles_window.jpg");
 		DisplayDriver display_driver(gfx);
 
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
@@ -265,7 +265,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(640, 480, "imgs/unit/triangles_window.bmp");
+		File_GFX gfx(640, 480, "imgs/unit/triangles_window.jpg");
 		DisplayDriver display_driver(gfx);
 
 		display_driver.fill_rect({ 0, 0 }, { 1, 1 }, black, full_screen);
@@ -284,7 +284,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(640, 480, "imgs/unit/poligons_full_screen.bmp");
+		File_GFX gfx(640, 480, "imgs/unit/poligons_full_screen.jpg");
 		DisplayDriver display_driver(gfx);
 
 		for (size_t idx = 8; idx > 2; --idx)
@@ -297,7 +297,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(640, 640, "imgs/unit/polar_window.bmp");
+		File_GFX gfx(640, 640, "imgs/unit/polar_window.jpg");
 		DisplayDriver display_driver(gfx);
 		PolarWindow polar_window{ { 0, 1 }, { 0, 1 }, full_screen };
 		constexpr size_t num_rays = 36;
@@ -341,7 +341,7 @@ int main()
 		DataLinear data_x{ 360 };
 
 		{
-			File_GFX gfx(640, 640, "imgs/unit/plot_line.bmp");
+			File_GFX gfx(640, 640, "imgs/unit/plot_line.jpg");
 			DisplayDriver display_driver(gfx);
 
 			auto options = plot_options.set_axis(10, 10, silver).segments(45);
@@ -354,7 +354,7 @@ int main()
 		}
 
 		{
-			File_GFX gfx(640, 640, "imgs/unit/plot_line_polar.bmp");
+			File_GFX gfx(640, 640, "imgs/unit/plot_line_polar.jpg");
 			DisplayDriver display_driver(gfx);
 
 			PolarWindow polar_window{ { 0, 1 }, { 0, 1 }, full_screen };
@@ -377,7 +377,7 @@ int main()
 		Range<size_t> rows = { 0, markers.size() + 1 };
 
 		{
-			File_GFX gfx(640, 640, "imgs/unit/plot_scatter.bmp");
+			File_GFX gfx(640, 640, "imgs/unit/plot_scatter.jpg");
 
 			Grafici plot{ gfx };
 			plot.set_color_map(rainbow);
@@ -392,7 +392,7 @@ int main()
 		}
 
 		{
-			File_GFX gfx(640, 640, "imgs/unit/plot_scatter_polar.bmp");
+			File_GFX gfx(640, 640, "imgs/unit/plot_scatter_polar.jpg");
 
 			Grafici plot{ gfx };
 			plot.set_color_map(rainbow);
@@ -409,62 +409,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(640, 640, "imgs/unit/rotations.bmp");
-
-		/* clang-format off */
-		DataResize data_x(DataLinear(10), { 0.5 / 11, 10.5 / 11 });
-		DataFunction data_y(10, [](size_t idx) -> float { return pow(idx, 2); });
-		/* clang-format on */
-
-		Grafici plot{ gfx };
-		plot.set_color_map(parula);
-
-		PlotOptions opts;
-		opts.thickness(0.5);
-
-		auto window1 = full_screen.sub_window({ 0, .5 }, { 0, .5 }).transform(WindowTransform::none);
-		plot.bar(data_x, data_y, data_y, window1, opts);
-
-		auto window2 = full_screen.sub_window({ .5, 1 }, { 0, .5 }).transform(WindowTransform::ccw_90_rotation);
-		plot.bar(data_x, data_y, data_y, window2, opts);
-
-		auto window3 = full_screen.sub_window({ 0, .5 }, { .5, 1 }).transform(WindowTransform::cw_90_rotation);
-		plot.bar(data_x, data_y, data_y, window3, opts);
-
-		auto window4 = full_screen.sub_window({ .5, 1 }, { .5, 1 }).transform(WindowTransform::both_flip);
-		plot.bar(data_x, data_y, data_y, window4, opts);
-	}
-
-	{
-		File_GFX gfx(640, 640, "imgs/unit/transformations.bmp");
-
-		/* clang-format off */
-		DataResize data_x(DataLinear(10), { 0.5 / 11, 10.5 / 11 });
-		DataFunction data_y(10, [](size_t idx) -> float{ return pow(idx, 2); });
-		/* clang-format on */
-
-		Grafici plot{ gfx };
-		plot.set_color_map(parula);
-
-		PlotOptions opts;
-		opts.set_axis(10, 10, white * 0.5);
-		opts.thickness(0.5);
-
-		auto window1 = full_screen.sub_window({ 0, .5 }, { 0, .5 }).transform(WindowTransform::none);
-		plot.bar(data_x, data_y, data_y, window1, opts);
-
-		auto window2 = full_screen.sub_window({ .5, 1 }, { 0, .5 }).transform(WindowTransform::h_flip);
-		plot.bar(data_x, data_y, data_y, window2, opts);
-
-		auto window3 = full_screen.sub_window({ 0, .5 }, { .5, 1 }).transform(WindowTransform::v_flip);
-		plot.bar(data_x, data_y, data_y, window3, opts);
-
-		auto window4 = full_screen.sub_window({ .5, 1 }, { .5, 1 }).transform(WindowTransform::both_flip);
-		plot.bar(data_x, data_y, data_y, window4, opts);
-	}
-
-	{
-		File_GFX gfx(240, 320, "imgs/examples/line_from_array.bmp");
+		File_GFX gfx(240, 320, "imgs/examples/line_from_array.jpg");
 		Grafici plot{ gfx };
 
 		constexpr size_t ARRAY_SIZE = 25;
@@ -491,7 +436,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(240, 320, "imgs/examples/line_from_function.bmp");
+		File_GFX gfx(240, 320, "imgs/examples/line_from_function.jpg");
 		Grafici plot{ gfx };
 
 		DataLinear data_x{ 100 };
@@ -504,7 +449,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(240, 320, "imgs/examples/line_and_histogram.bmp");
+		File_GFX gfx(240, 320, "imgs/examples/line_and_histogram.jpg");
 		Grafici plot{ gfx };
 
 		constexpr size_t ARRAY_SIZE = 60;
@@ -543,15 +488,15 @@ int main()
 	}
 
 	{
-		// File_GFX gfx(240, 320, "imgs/examples/pie.bmp");
+		// File_GFX gfx(240, 320, "imgs/examples/pie.jpg");
 	}
 
 	{
-		// File_GFX gfx(240, 320, "imgs/examples/multi_bar.bmp");
+		// File_GFX gfx(240, 320, "imgs/examples/multi_bar.jpg");
 	}
 
 	// {
-	// 	File_GFX gfx(240, 320, "imgs/examples/spline_from_array.bmp");
+	// 	File_GFX gfx(240, 320, "imgs/examples/spline_from_array.jpg");
 	// 	Grafici plot{ gfx };
 
 	// 	constexpr size_t ARRAY_SIZE = 10;
@@ -577,7 +522,7 @@ int main()
 	// }
 
 	{
-		File_GFX gfx(240, 240, "imgs/wiki/window.bmp");
+		File_GFX gfx(240, 240, "imgs/wiki/window.jpg");
 
 		DisplayDriver display_driver(gfx);
 
@@ -588,7 +533,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(240, 240, "imgs/wiki/window2.bmp");
+		File_GFX gfx(240, 240, "imgs/wiki/window2.jpg");
 
 		DisplayDriver display_driver(gfx);
 
@@ -600,7 +545,7 @@ int main()
 	}
 
 	{
-		File_GFX gfx(240, 240, "imgs/wiki/window3.bmp");
+		File_GFX gfx(240, 240, "imgs/wiki/window3.jpg");
 
 		DisplayDriver display_driver(gfx);
 
@@ -612,7 +557,7 @@ int main()
 	}
 
 	// {
-	// 	File_GFX gfx(240, 320, "imgs/wiki/gartner_hype_cycle.bmp");
+	// 	File_GFX gfx(240, 320, "imgs/wiki/gartner_hype_cycle.jpg");
 	// 	Grafici plot{ gfx };
 
 	// 	int hype_raw[] = { 0, 100, 20, 50, 60, 60, 60 };
@@ -625,7 +570,7 @@ int main()
 	// }
 
 	{
-		File_GFX gfx(1024, 768, "imgs/examples/scatter_and_histogram_from_distribution.bmp");
+		File_GFX gfx(1024, 768, "imgs/examples/scatter_and_histogram_from_distribution.jpg");
 		Grafici plot{ gfx };
 
 		constexpr size_t data_size = 300;
