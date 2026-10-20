@@ -131,10 +131,10 @@ int main()
 	DataInterpolatorL linear_interpolator{ data_linear_x, data_linear_y, 110 };
 	for (size_t idx = 0; idx < linear_interpolator.size(); ++idx)
 	{
-		assert_float(linear_interpolator.x()[idx].raw(), idx * (1.0 / 11));
-		assert_float(linear_interpolator.x()[idx].norm(), idx * (1.0 / 110));
-		assert_float(linear_interpolator.y()[idx].raw(), idx * (2.0 / 11));
-		assert_float(linear_interpolator.y()[idx].norm(), idx * (1.0 / 110));
+		assert_float(linear_interpolator.x()[idx].raw(), idx * (10.0 / 109));
+		assert_float(linear_interpolator.x()[idx].norm(), idx * (1.0 / 109));
+		assert_float(linear_interpolator.y()[idx].raw(), idx * (20.0 / 109));
+		assert_float(linear_interpolator.y()[idx].norm(), idx * (1.0 / 109));
 	}
 
 	/* == Test DataFunction == */
@@ -146,8 +146,8 @@ int main()
 	DataSpline<110> spline_interpolator{ data_linear_x, data_function_zig_zag };
 	for (size_t idx = 0; idx < spline_interpolator.size(); ++idx)
 	{
-		assert_float(spline_interpolator.x()[idx].raw(), idx * (1.0 / 11));
-		assert_float(spline_interpolator.x()[idx].norm(), idx * (1.0 / 110));
+		assert_float(spline_interpolator.x()[idx].raw(), idx * (10.0 / 109));
+		assert_float(spline_interpolator.x()[idx].norm(), idx * (1.0 / 109));
 		/* we cannot test y */
 	}
 
