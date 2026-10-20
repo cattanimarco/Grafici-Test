@@ -13,7 +13,8 @@ Grafici-Test serves as a testing and development platform for the Grafici-GFX li
 ## Project Structure
 
 - `File_GFX.h`: File-based graphics driver that implements the Adafruit GFX interface
-- `unit.cpp`: Comprehensive test suite covering all Grafici-GFX features
+- `unit.cpp`: Graphics integration checks and rendered example images
+- `tests/`: Focused host regressions for spline safety, interpolation, Float16, data contracts and clipping
 - `Grafici-GFX/`: Arduino library (included as a git submodule)
 - `imgs/`: Generated test outputs
   - `unit/`: Unit test output images
@@ -47,6 +48,22 @@ The test suite will generate various JPEG images in the `imgs/` directory, demon
 - Histograms
 - Polar plots
 - Heat maps
+
+## Host regression checks
+
+With Python 3 and a C++11 compiler, run the focused regressions against the pinned library submodule:
+
+```sh
+make regressions-sanitize
+```
+
+These ten runtime checks and two expected compile-time rejections use a small drawing-call recorder. They do not generate images. To test another library checkout:
+
+```sh
+python3 tests/run_checks.py --sanitize --library /path/to/Grafici-GFX
+```
+
+See [regression instructions](tests/README.md) for coverage, compiler options, Arduino builds and library compliance/release checks. Use `make regressions` if the compiler does not support the sanitizers. When changing the library, update its submodule pointer alongside the corresponding regression changes.
 
 ## File-Based Graphics Driver
 

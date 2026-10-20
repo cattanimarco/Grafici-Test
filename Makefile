@@ -1,6 +1,8 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall -Wpedantic -Wunused -Wextra
 INCLUDES = -I.
+PYTHON ?= python3
+LIBRARY ?= Grafici-GFX
 
 # Source directories
 SRC_DIRS = . \
@@ -20,7 +22,7 @@ BUILD_DIR = build
 IMG_DIRS = imgs/unit imgs/examples
 
 # Main targets
-.PHONY: all clean run docs doxygen help
+.PHONY: all clean run docs doxygen help regressions regressions-sanitize
 
 all: directories unit
 
@@ -29,6 +31,8 @@ help:
 	@echo "  all        - Build everything (default)"
 	@echo "  unit       - Build unit tests"
 	@echo "  run        - Build and run unit tests"
+	@echo "  regressions - Run focused host regressions"
+	@echo "  regressions-sanitize - Run regressions with UBSan"
 	@echo "  docs       - Generate documentation"
 	@echo "  clean      - Remove build artifacts"
 	@echo "  help       - Show this help message"
@@ -43,6 +47,12 @@ unit: $(OBJ)
 
 run: all
 	@./unit
+
+regressions:
+	$(PYTHON) tests/run_checks.py --library "$(LIBRARY)"
+
+regressions-sanitize:
+	$(PYTHON) tests/run_checks.py --sanitize --library "$(LIBRARY)"
 
 # Documentation targets
 docs: doxygen
