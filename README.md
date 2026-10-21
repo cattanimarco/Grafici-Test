@@ -74,6 +74,10 @@ The `File_GFX` class implements the Adafruit GFX interface but writes output to 
 
 The generated images are used to maintain the [Grafici-Wiki](https://github.com/cattanimarco/Grafici-GFX/wiki), providing visual documentation of the library's capabilities and usage examples. Each test run produces a set of images that demonstrate various plotting features and capabilities of the Grafici-GFX library.
 
+## Agent assistance
+
+[AGENTS.md](AGENTS.md) points to the local [grafici-render](.agents/skills/grafici-render/SKILL.md) skill for generating pictures, investigating backend mismatches and publishing reproducible image links. For library changes or Arduino sketch debugging, use the skills in the Grafici-GFX checkout being tested. The skills are plain Markdown and can also be given to an agent by file path.
+
 ## Contributing
 
 1. Fork the repository
