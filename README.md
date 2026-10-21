@@ -15,10 +15,12 @@ Grafici-Test serves as a testing and development platform for the Grafici-GFX li
 - `File_GFX.h`: File-based graphics driver that implements the Adafruit GFX interface
 - `unit.cpp`: Comprehensive test suite covering all Grafici-GFX features
 - `Grafici-GFX/`: Arduino library (included as a git submodule)
+- `docs/render.py`: Renderer for marked examples in the library guides
 - `imgs/`: Generated test outputs
   - `unit/`: Unit test output images
   - `examples/`: Example visualizations
   - `wiki/`: Images for the Grafici-Wiki documentation
+  - `guides/`: PNGs and a provenance manifest for the README and contributor guide
 
 ## Dependencies
 
@@ -48,6 +50,18 @@ The test suite will generate various JPEG images in the `imgs/` directory, demon
 - Polar plots
 - Heat maps
 
+## Generate guide pictures
+
+Use Python 3 and a C++11 compiler to render the marked examples from the library's README and contributor guide:
+
+```sh
+python3 docs/render.py --library /path/to/Grafici-GFX --sanitize
+```
+
+Select a library checkout containing the `grafici-example` markers. The renderer extracts the C++ snippets and uses `File_GFX` instead of the Arduino display driver and hardware initialization. Plotting code, sources and options remain the same. It writes 640-by-480 PNGs to `imgs/guides/`, together with the library revision, source fingerprint, snippet hashes and image hashes in `manifest.json`. No Python packages are required; `--sanitize` enables the compiler's undefined-behavior checks.
+
+Review the generated pictures before committing them with the renderer. Link Markdown pictures to the published image commit so a later regeneration does not silently change an older guide. To change the output directory or compiler, use `--output` or `--cxx`.
+
 ## File-Based Graphics Driver
 
 The `File_GFX` class implements the Adafruit GFX interface but writes output to image files instead of a physical display. Features include:
@@ -58,7 +72,11 @@ The `File_GFX` class implements the Adafruit GFX interface but writes output to 
 
 ## Documentation
 
-The generated images are used to maintain the [Grafici-Wiki](https://github.com/cattanimarco/Grafici-Wiki), providing visual documentation of the library's capabilities and usage examples. Each test run produces a set of images that demonstrate various plotting features and capabilities of the Grafici-GFX library.
+The generated images are used to maintain the [Grafici-Wiki](https://github.com/cattanimarco/Grafici-GFX/wiki), providing visual documentation of the library's capabilities and usage examples. Each test run produces a set of images that demonstrate various plotting features and capabilities of the Grafici-GFX library.
+
+## Agent assistance
+
+[AGENTS.md](AGENTS.md) points to the local [grafici-render](.agents/skills/grafici-render/SKILL.md) skill for generating pictures, investigating backend mismatches and publishing reproducible image links. For library changes or Arduino sketch debugging, use the skills in the Grafici-GFX checkout being tested. The skills are plain Markdown and can also be given to an agent by file path.
 
 ## Contributing
 

@@ -33,8 +33,8 @@ public:
         uint8_t g = ((color >> 5) & 0x3F) * 255 / 63;
         uint8_t b = (color & 0x1F) * 255 / 31;
 
-        // Calculate position in buffer (y is flipped to match standard image coordinates)
-        size_t pos = ((_height - 1 - y) * _width + x) * 3;
+        // Adafruit GFX coordinates and image rows both start at the top-left.
+        size_t pos = (static_cast<size_t>(y) * _width + x) * 3;
         buffer[pos] = r;
         buffer[pos + 1] = g;
         buffer[pos + 2] = b;

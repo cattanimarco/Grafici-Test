@@ -1,5 +1,7 @@
 *.o
 **/.*
+# Repository-local agent skills are versioned.
+!/.agents/
 !/Grafici-GFX
 !/imgs
 unit
