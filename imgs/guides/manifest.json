@@ -1,0 +1,62 @@
+{
+  "library_commit": "f7d4955b986144536ed14503cfbf614eac12a2ca",
+  "library_source_sha256": "a0dcbc0839be17caca8242be1ff78a0d3c920476a060fb97a6c96851c386bf84",
+  "renderer_sha256": "556603abb6695c81b1d0cd8ac2e2c9c2d603d48b6b6e0c26dec25348fee2d73a",
+  "examples": [
+    {
+      "document": "README.md",
+      "marker": "beats",
+      "code_sha256": "88b146c3ff81fa2ea6f9fcd8ea5ca42f1ddffa124d5644faccc88dd00630c258",
+      "image": "beats.png",
+      "image_sha256": "b48ce7f79b7551acd68d51930c7682e78b4307bdba00c75aab6a2adf5c537041",
+      "dimensions": [
+        640,
+        480
+      ]
+    },
+    {
+      "document": "README.md",
+      "marker": "plot-types",
+      "code_sha256": "25884439bb87005812ae7a061beb86add65bd7ffa6c1ada24dbd998859184444",
+      "image": "plot_types.png",
+      "image_sha256": "434ff961defd8194222b0b5c6fedb5000c4300d28987dd8694351d8e26a336b9",
+      "dimensions": [
+        640,
+        480
+      ]
+    },
+    {
+      "document": "README.md",
+      "marker": "polar",
+      "code_sha256": "4dd9d989b91a0f58c940065fac6463c54e5a4879799c9ef388a235b33087eae3",
+      "image": "polar_beats.png",
+      "image_sha256": "e95bc5032b7962544b42c718701969bcf41ef73228d917abba5cc60ac65c0674",
+      "dimensions": [
+        640,
+        480
+      ]
+    },
+    {
+      "document": "CONTRIBUTE.md",
+      "marker": "hype-cycle",
+      "code_sha256": "fed5d3266f602febfe720eb9d0b0365890240a313a80a192129b5ecc65ab6535",
+      "image": "hype_cycle.png",
+      "image_sha256": "4d9d8dea24bd55615337ebe524379c38b010b0bb40bd25ff716bb13e7d5046ee",
+      "dimensions": [
+        640,
+        480
+      ]
+    },
+    {
+      "document": "CONTRIBUTE.md",
+      "marker": "chirp",
+      "code_sha256": "319e4eccb3c0ed12aea5c64e643d3e346085a4837d5b4e992ad758ce5b4489cd",
+      "image": "chirp.png",
+      "image_sha256": "f6f057e942bce624ddb5973910292f201417b8c94a755ca4f01d823b62b3060f",
+      "dimensions": [
+        640,
+        480
+      ]
+    }
+  ]
+}
