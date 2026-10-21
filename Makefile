@@ -1,6 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall -Wpedantic -Wunused -Wextra
 INCLUDES = -I.
+LIBRARY ?= Grafici-GFX
 
 # Source directories
 SRC_DIRS = . \
@@ -20,7 +21,7 @@ BUILD_DIR = build
 IMG_DIRS = imgs/unit imgs/examples
 
 # Main targets
-.PHONY: all clean run docs doxygen help
+.PHONY: all clean run docs doxygen help callbacks
 
 all: directories unit
 
@@ -29,6 +30,7 @@ help:
 	@echo "  all        - Build everything (default)"
 	@echo "  unit       - Build unit tests"
 	@echo "  run        - Build and run unit tests"
+	@echo "  callbacks  - Check DataFunction pointer and capturing callbacks"
 	@echo "  docs       - Generate documentation"
 	@echo "  clean      - Remove build artifacts"
 	@echo "  help       - Show this help message"
@@ -43,6 +45,13 @@ unit: $(OBJ)
 
 run: all
 	@./unit
+
+# Check both callback modes against the submodule or LIBRARY=/path/to/Grafici-GFX.
+callbacks: directories
+	$(CXX) $(CXXFLAGS) -I"$(LIBRARY)/src" tests/data_function_callbacks.cpp -o $(BUILD_DIR)/callbacks-pointer
+	./$(BUILD_DIR)/callbacks-pointer
+	$(CXX) $(CXXFLAGS) -DGRAFICI_USE_STD_FUNCTION=1 -I"$(LIBRARY)/src" tests/data_function_callbacks.cpp -o $(BUILD_DIR)/callbacks-captured
+	./$(BUILD_DIR)/callbacks-captured
 
 # Documentation targets
 docs: doxygen
